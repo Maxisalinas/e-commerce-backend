@@ -6,4 +6,4 @@ Para ver las últimas actualizaciones y avances en desarrollo, cambiate a la ram
 Por ahora, no hay un build disponible en esta rama.
 
 
-**By Maximiliano Salinas, owner y desarrollador** 🚀
+**By Maximiliano Salinas, owner & developer 🚀** 
