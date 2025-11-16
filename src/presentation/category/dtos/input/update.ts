@@ -1,7 +1,12 @@
-import { z } from 'zod';
+import { UpdateCategoryDTOProps } from "./update-schema.js";
 
-export const UpdateCategorySchema = z.object({
-    name: z.string().min(5, 'El nombre del producto debe tener al menos 5 caracteres'),
-});
+export class UpdateCategoryDTO {
 
-export type UpdateCategoryDTO = z.infer<typeof UpdateCategorySchema>;
+    public readonly name!: string;
+
+    constructor(input: UpdateCategoryDTOProps) {
+        Object.assign(this, input);
+    }
+
+}
+

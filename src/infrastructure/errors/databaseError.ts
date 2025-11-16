@@ -1,8 +1,11 @@
 
 export class DatabaseError extends Error {
-  constructor(message: string, public originalError?: unknown) {
-    super(message);
-    this.name = 'DatabaseError';
-  }
+    constructor(
+        public message: string, 
+        public details?: any
+    ){
+        super(message);
+        this.name = 'DatabaseError';
+    }
 }
 

@@ -1,4 +1,3 @@
-import { Decimal } from "@prisma/client/runtime/library";
 import { ProductEntity } from "../../../../domain/product/entity.js";
 
 export class ProductResponseDTO {
@@ -14,7 +13,7 @@ export class ProductResponseDTO {
         this.id = product.id;
         this.categoryId = product.categoryId;
         this.name = product.name;
-        this.description = product.name
+        this.description = product.description;
         this.price = parseFloat(product.price.toString()); 
         this.stock = product.stock;
         this.imageUrl = product.imageUrl;

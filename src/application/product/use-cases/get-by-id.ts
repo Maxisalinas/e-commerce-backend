@@ -15,8 +15,8 @@ export class GetProductById implements GetProductByIdUseCase {
     public async execute( id: number ): Promise<ProductResponseDTO> {
    
         const product: ProductEntity = await this.productRepository.getById( id );
-        const productsResponseDTO: ProductResponseDTO = new ProductResponseDTO(product);
-        return productsResponseDTO;
+        return new ProductResponseDTO(product);
+
     }
 
 }

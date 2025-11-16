@@ -1,8 +1,8 @@
 import { prisma } from "../database/postgres/prisma-client.js";
 import { CategoryEntity } from "../../domain/category/entity.js";
 import { CategoryRepository } from "../../domain/category/repository.js";
-import { CategoryFilter } from "../../application/category/use-cases/getmany.js";
 import { UpdateCategoryDTO } from "../../presentation/category/dtos/input/update.js";
+import { CategoryFilter } from "../../application/category/use-cases/getmany.js";
 import { NotFoundError } from "../errors/notFoundError.js";
 
 export class CategoryRepositoryImpl implements CategoryRepository {
@@ -27,7 +27,6 @@ export class CategoryRepositoryImpl implements CategoryRepository {
     }
 
     public async create( category: CategoryEntity ): Promise<CategoryEntity> {
-        
         const newCategory = await prisma.category.create({
             data: category
         });
@@ -35,16 +34,15 @@ export class CategoryRepositoryImpl implements CategoryRepository {
         return categoryEntity;
     }
 
-    public async update(id: number, category: CategoryEntity, dto: UpdateCategoryDTO): Promise<CategoryEntity> {
+    public async update(category: CategoryEntity): Promise<CategoryEntity> {
         
-        const updatedCategory = await prisma.category.update({
-            where: { id },
-            data: { 
-                ...category,
-                ...dto 
-            }
+        const updated = await prisma.category.update({
+            where: { id: category.id },
+            data: {
+                name: category.name,
+            },
         });
-        return CategoryEntity.fromObject(updatedCategory);
+        return CategoryEntity.fromObject(updated);
     }
 
     public async delete( id: number ): Promise<void> {
@@ -52,6 +50,7 @@ export class CategoryRepositoryImpl implements CategoryRepository {
         await prisma.category.delete({
             where: { id }
         });
+        
         return;
     }
 

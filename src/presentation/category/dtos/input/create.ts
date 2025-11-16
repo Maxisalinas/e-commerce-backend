@@ -1,7 +1,12 @@
-import { z } from 'zod';
+import { CreateCategoryDTOProps } from "./create-schema.js";
 
-export const CreateCategorySchema = z.object({
-    name: z.string().min(5, 'El nombre del producto debe tener al menos 5 caracteres'),
-});
+export class CreateCategoryDTO {
 
-export type CreateCategoryDTO = z.infer<typeof CreateCategorySchema>;
+    public readonly name!: string;
+
+    constructor(input: CreateCategoryDTOProps) {
+        Object.assign(this, input);
+    }
+
+}
+

@@ -1,19 +1,22 @@
 import { Router } from 'express';
+
+// routes
 import { ProductsRoutes } from './product/routes.js';
 import { CategoriesRoutes } from './category/routes.js';
-import { ProductController } from './product/controller.js';
-import { CategoryController } from './category/controller.js';
+import { UsersRoutes } from './user/routes.js';
+import { AuthRoutes } from './auth/routes.js';
 
 export class AppRoutes {
 
-  static routes(productController: ProductController, categoryController: CategoryController): Router {
+  static routes(controllers: any): Router {
     const router = Router();
     
-    // router.use('/auth', AuthRoutes.routes );
-    // router.use('/users', UsersRoutes.routes );
-    // router.use('/users', AddressRoutes.routes ); // <- Address
-    router.use('/products', ProductsRoutes.routes(productController) );
-    router.use('/categories', CategoriesRoutes.routes(categoryController) );
+
+    router.use('/products', ProductsRoutes.routes(controllers.productController) );
+    router.use('/categories', CategoriesRoutes.routes(controllers.categoryController) );
+    router.use('/auth', AuthRoutes.routes(controllers.authController));
+    router.use('/users', UsersRoutes.routes(controllers.userController));
+    // router.use('/users', UsersRoutes.routes );  <- Address (RECORDATORIO)
     // router.use('/cart', CartRoutes.routes );
     // router.use('/orders', CartRoutes.routes );
 

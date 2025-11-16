@@ -11,15 +11,17 @@ export class UpdateProduct implements UpdateProductUseCase {
 
     constructor(
         private readonly productRepository: ProductRepository,
-    ) {};
+    ) {}
 
     public async execute(id: number, updateProductDTO: UpdateProductDTO): Promise<ProductResponseDTO> {
 
         const product = await this.productRepository.getById( id );
-        const productEntity: ProductEntity = ProductEntity.fromObject(product);
-        const updatedProduct = await this.productRepository.update(id, productEntity, updateProductDTO );
-        const productResponseDTO: ProductResponseDTO = new ProductResponseDTO(updatedProduct);
-        return productResponseDTO;
-    };
+        const productEntity = ProductEntity.fromObject({
+            ...product,
+            ...updateProductDTO
+        });
+        const updatedProduct = await this.productRepository.update(productEntity);
+        return new ProductResponseDTO(updatedProduct);
+    }
 
 }

@@ -1,14 +1,14 @@
 export class CategoryEntity {
 
     constructor(
-        public readonly id: number,
-        public readonly name: string
+        public readonly name: string,
+        public readonly id?: number
     ) {}
     
     public static fromObject(object: any): CategoryEntity {
         
-        const { id, name } = object;
-        return new CategoryEntity( id, name );
+        const { name, id } = object;
+        return new CategoryEntity( name, id );
 
     }
 

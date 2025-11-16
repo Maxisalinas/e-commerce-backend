@@ -1,7 +1,12 @@
-import { z } from 'zod';
+import { GetManyCategoriesDTOProps } from "./getmany-schema.js";
 
-export const GetManyCategoriesSchema = z.object({
-    search: z.string().optional().default(''),
-});
+export class GetManyCategoriesDTO {
 
-export type GetManyCategoriesDTO = z.infer<typeof GetManyCategoriesSchema>;
+    public readonly search!: string;
+
+    constructor(input: GetManyCategoriesDTOProps) {
+        Object.assign(this, input);
+    }
+
+}
+

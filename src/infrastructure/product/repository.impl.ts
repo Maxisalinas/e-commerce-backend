@@ -1,9 +1,9 @@
 import { prisma } from "../database/postgres/prisma-client.js";
 import { ProductRepository } from "../../domain/product/repository.js";
 import { ProductEntity } from "../../domain/product/entity.js";
-import { ProductFilter } from "../../application/product/use-cases/getmany.js";
-import { NotFoundError } from "../errors/notFoundError.js";
 import { UpdateProductDTO } from "../../presentation/product/dtos/input/update.js";
+import type { ProductFilter } from "../../application/product/use-cases/interfaces/filter.js";
+import { NotFoundError } from "../errors/notFoundError.js";
 
 export class ProductRepositoryImpl implements ProductRepository {
     
@@ -15,35 +15,52 @@ export class ProductRepositoryImpl implements ProductRepository {
             }
         });
         if (!product) throw new NotFoundError('No se encontró un producto con el número de ID proporcionado.');
-        const productEntity: ProductEntity = ProductEntity.fromObject(product);
-        return productEntity;
+        return ProductEntity.fromObject(product);
     }
 
     public async getMany( filter: ProductFilter ): Promise<ProductEntity[]> {
 
-        const products = await prisma.product.findMany({}); // TODO: Falta la paginación.
+        const { page, limit, search, categoryId, minPrice, maxPrice } = filter;
+
+        const products = await prisma.product.findMany({
+            where: {
+                // Filtro de búsqueda por nombre
+                name: {
+                    contains: search, 
+                    mode: 'insensitive', // Insensible a mayúsculas/minúsculas
+                },
+                // Filtro por CategoryId (FK)
+                categoryId: categoryId,  // Filtra solo si se pasa categoryId
+                // Filtro de precio
+                price: {
+                    gte: minPrice,
+                    lte: maxPrice,
+                },
+            },
+            skip: (page - 1) * limit,  // Paginación
+            take: limit,  // Limita la cantidad de resultados
+        });
+
         if (!products) throw new NotFoundError(`No se encontraron productos.`);
         return ProductEntity.fromObjectList(products);
     }
 
 
     public async create( product: ProductEntity ): Promise<ProductEntity> {
-        
         const newProduct = await prisma.product.create({
             data: product
         });
         return ProductEntity.fromObject(newProduct);
     }
 
-    public async update(id: number, product: ProductEntity, dto: UpdateProductDTO): Promise<ProductEntity> {
+    public async update(product: ProductEntity): Promise<ProductEntity> {
         
         const updatedProduct = await prisma.product.update({
             where: {
-                id
+                id: product.id
             },
             data: {
                 ...product,
-                ...dto
             }
         });
         return ProductEntity.fromObject(updatedProduct);
@@ -57,3 +74,5 @@ export class ProductRepositoryImpl implements ProductRepository {
         return;
     }
 }
+
+

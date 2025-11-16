@@ -5,9 +5,8 @@ export class CategoryResponseDTO {
     public readonly id: number;
     public readonly name: string;
 
-
     constructor(category: CategoryEntity) {
-        this.id = category.id;
+        this.id = category.id!;
         this.name = category.name;
     }
 

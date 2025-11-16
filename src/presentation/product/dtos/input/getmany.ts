@@ -1,12 +1,16 @@
-import { z } from 'zod';
+import { GetManyProductsDTOProps } from "./getmany-schema.js";
 
-export const GetManyProductsSchema = z.object({
-    page: z.coerce.number().int().positive().default(1),
-    limit: z.coerce.number().int().positive().default(10),
-    search: z.string().optional().default(''),
-    category: z.string().optional().default(''),
-    minPrice: z.coerce.number().nonnegative().optional(),
-    maxPrice: z.coerce.number().nonnegative().optional(),
-});
+export class GetManyProductsDTO {
 
-export type GetManyProductsDTO = z.infer<typeof GetManyProductsSchema>;
+    public readonly page!: number;
+    public readonly limit!: number;
+    public readonly search!: string;
+    public readonly categoryId?: number;
+    public readonly minPrice?: number;
+    public readonly maxPrice?: number;
+
+    constructor(input: GetManyProductsDTOProps) {
+        Object.assign(this, input);
+    }
+
+}

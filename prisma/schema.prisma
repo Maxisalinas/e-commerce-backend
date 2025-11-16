@@ -32,3 +32,18 @@ model Category {
   name     String    @db.VarChar(100)
   products Product[] // Relación uno a muchos (una categoría tiene muchos productos)
 }
+
+model User {
+  id        String   @id @default(uuid())
+  name      String   @db.VarChar(30)
+  email     String   @unique @db.VarChar(30)
+  password  String   @db.VarChar(255) // Encriptada
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  USER
+}

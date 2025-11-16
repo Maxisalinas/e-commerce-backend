@@ -11,8 +11,8 @@ export class DeleteProduct implements DeleteProductUseCase {
     ) {}
 
     public async execute( id: number ): Promise<void> {
-        await this.productRepository.delete( id );
-        return;
+        const deletedProduct = await this.productRepository.delete( id );
+        return deletedProduct;  // REVISAR
     }
 
 }

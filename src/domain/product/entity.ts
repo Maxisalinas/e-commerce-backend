@@ -9,13 +9,23 @@ export class ProductEntity {
         public readonly price: Decimal,
         public readonly stock: number,
         public readonly imageUrl: string,
-        public readonly createdAt: Date,
-        public readonly updatedAt: Date
+        public readonly createdAt?: Date,
+        public readonly updatedAt?: Date
     ) {}
 
     public static fromObject(object: any): ProductEntity {
         
-        const { id, categoryId, name, description, price, stock, imageUrl, createdAt, updatedAt } = object;
+        const { 
+            id, 
+            categoryId, 
+            name,
+            description, 
+            price, 
+            stock, 
+            imageUrl, 
+            createdAt, 
+            updatedAt 
+        } = object;
 
         return new ProductEntity(
             id,
@@ -33,4 +43,19 @@ export class ProductEntity {
     public static fromObjectList(objects: any[]): ProductEntity[] {
         return objects.map(obj => ProductEntity.fromObject(obj));
     }
+
+    // public static fromNewObject(object: any): ProductEntity {
+                
+    //     const { id = undefined, categoryId, name, description, price, stock, imageUrl } = object;
+
+    //     return new ProductEntity(
+    //         id,
+    //         categoryId,
+    //         name,
+    //         description,
+    //         price,
+    //         stock,
+    //         imageUrl,
+    //     );
+    // }
 }

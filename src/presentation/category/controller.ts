@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';;
+import type { GetCategoryByIdUseCase } from '../../application/category/interfaces/get-by-id-use-case.js';
+import type { GetManyCategoriesUseCase } from '../../application/category/interfaces/getmany-use-case.js';
+import type { CreateCategoryUseCase } from '../../application/category/interfaces/create-use-case.js';
+import type { UpdateCategoryUseCase } from '../../application/category/interfaces/update-use-case.js';
+import type { DeleteCategoryUseCase } from '../../application/category/interfaces/delete-use-case.js';
 import { CategoryResponseDTO } from './dtos/output/response.js';
 import { GetManyCategoriesDTO } from './dtos/input/getmany.js';
 import { CreateCategoryDTO } from './dtos/input/create.js';
 import { UpdateCategoryDTO } from './dtos/input/update.js';
-import { GetCategoryByIdUseCase } from '../../application/category/use-cases/get-by-id.js';
-import { GetManyCategoriesUseCase } from '../../application/category/use-cases/getmany.js';
-import { CreateCategoryUseCase } from '../../application/category/use-cases/create.js';
-import { UpdateCategoryUseCase } from '../../application/category/use-cases/update.js';
-import { DeleteCategoryUseCase } from '../../application/category/use-cases/delete.js';
 
 
 export class CategoryController {
@@ -21,30 +21,32 @@ export class CategoryController {
     ){}
 
     public getById = async ( req: Request, res: Response ) => {
-        const id: number = (req as any).validatedParams.id;
+        const id: number = (req as any).paramsParsed.id;
         const category: CategoryResponseDTO = await this.getCategoryByIdUseCase.execute(id);
         return res.status(200).json(category);
     }
 
-    public getMany = async ( req: Request, res: Response<CategoryResponseDTO[]> ) => {
-        const getManyCategoriesDTO: GetManyCategoriesDTO = req.query as unknown as GetManyCategoriesDTO;
+    public getMany = async ( req: Request, res: Response ) => {
+        const getManyCategoriesDTO = new GetManyCategoriesDTO((req as any).queryParsed);
         const categories: CategoryResponseDTO[] = await this.getManyCategoriesUseCase.execute(getManyCategoriesDTO);
         return res.status(200).json(categories);
     }
 
-    public create = async ( req: Request, res: Response<CategoryResponseDTO> ) => {
-        const createCategoryDTO: CreateCategoryDTO = req.query as unknown as CreateCategoryDTO;
+    public create = async ( req: Request, res: Response ) => {
+        const createCategoryDTO = new CreateCategoryDTO((req as any).bodyParsed);
         const newCategory: CategoryResponseDTO = await this.createCategoryUseCase.execute(createCategoryDTO);
         return res.status(201).json(newCategory);
     }
+    
     public update = async ( req: Request, res: Response ) => {
-        const id: number = (req as any).validatedParams.id;
-        const updateCategoryDTO: UpdateCategoryDTO = req.body;
+        const id: number = (req as any).paramsParsed.id;
+        const updateCategoryDTO = new UpdateCategoryDTO((req as any).bodyParsed);
         const updatedCategory: CategoryResponseDTO = await this.updateCategoryUseCase.execute(id, updateCategoryDTO);
         return res.status(200).json(updatedCategory);
     }
+
     public delete = async ( req: Request, res: Response ) => {
-        const id: number = (req as any).validatedParams.id;
+        const id: number = (req as any).paramsParsed.id;
         await this.deleteCategoryUseCase.execute(id);
         return res.status(200).json({ message: 'Categoría eliminada correctamente.' });
     }

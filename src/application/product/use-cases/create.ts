@@ -11,14 +11,12 @@ export class CreateProduct implements CreateProductUseCase {
 
     constructor(
         private readonly productRepository: ProductRepository,
-    ) {};
+    ) {}
 
     public async execute(createProductDTO: CreateProductDTO): Promise<ProductResponseDTO> {
-
         const product: ProductEntity = ProductEntity.fromObject(createProductDTO);
         const newProduct = await this.productRepository.create(product);
-        const productResponseDTO: ProductResponseDTO = new ProductResponseDTO(newProduct);
-        return productResponseDTO;
-    };
+        return new ProductResponseDTO(newProduct);
+    }
 
 }

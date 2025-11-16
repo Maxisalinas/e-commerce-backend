@@ -1,8 +1,5 @@
 import { CategoryRepository } from "../../../domain/category/repository.js";
-
-export interface DeleteCategoryUseCase {
-    execute( id: number ): Promise<void>,
-}
+import { DeleteCategoryUseCase } from "../interfaces/delete-use-case.js";
 
 export class DeleteCategory implements DeleteCategoryUseCase {
 
