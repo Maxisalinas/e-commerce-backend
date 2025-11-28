@@ -25,9 +25,18 @@
 - ✅ Segunda migración hacia la base de datos local. 
 
 ## MODULO 3: Cart
-- ⏳
-- ⏳
-- ⏳
+- ✅ Creación de entidades: Cart y CartItem con relaciones adecuadas.
+- ✅ Implementación de operaciones y casos de uso tipicos de Cart:
+    - Obtener carrito.
+    - Limpiar Carrito
+    - Añadir items, evitando duplicados y consultando stock.
+    - Actualizar cantidad del producto seleccionado.
+    - Remover item.
+    - Persisitr carrito post login.
+- ✅ Validaciones de entrada y salida.
+- ✅ Centralizar la inicialización de la app.
+- ✅ Migrar a la base de datos.
+
 
 ## MODULO 4: Order
 - ⏳

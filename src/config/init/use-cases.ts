@@ -23,11 +23,17 @@ import { LoginUser } from "../../application/auth/use-cases/login.js";
 import { BcryptHasher } from "../../infrastructure/helpers/bcrypt-hasher.js";
 import { JsonWebToken } from "../../infrastructure/helpers/jsonwebtoken-jwt-generator.js";
 import { RefreshToken } from "../../application/auth/use-cases/refresh-token.js";
+import { GetCartById } from "../../application/cart/usecases/get-by-id.js";
+import { GetCartByUserId } from "../../application/cart/usecases/get-by-user-id.js";
+import { AddCartItem } from "../../application/cart/usecases/add-item.js";
+import { RemoveCartItem } from "../../application/cart/usecases/remove-item.js";
+import { UpdateCartItem } from "../../application/cart/usecases/update-item.js";
+import { ClearCart } from "../../application/cart/usecases/clear.js";
 
 
 export function initUseCases(repositories: Repositories): UseCases {
 
-  const { productRepository, categoryRepository, userRepository } = repositories;
+  const { productRepository, categoryRepository, userRepository, cartRepository } = repositories;
   const passwordHasher = new BcryptHasher();
 
   return {
@@ -52,8 +58,18 @@ export function initUseCases(repositories: Repositories): UseCases {
     updateUserUseCase: new UpdateUser(userRepository),
     deleteUserUseCase: new DeleteUser(userRepository),
 
-    // Auth
-    loginUserUseCase: new LoginUser(userRepository, passwordHasher, JsonWebToken),
+    // auth
+    loginUserUseCase: new LoginUser(userRepository, cartRepository, passwordHasher, JsonWebToken,),
     refreshTokenUseCase: new RefreshToken(JsonWebToken),
-  };
+
+    // Cart
+    getCartByIdUseCase: new GetCartById(cartRepository),
+    getCartByUserIdUseCase: new GetCartByUserId(cartRepository),
+    clearCartUseCase: new ClearCart(cartRepository),
+    addCartItemUseCase: new AddCartItem(cartRepository, productRepository),
+    updateCartItemUseCase: new UpdateCartItem(cartRepository),
+    removeCartItemUseCase: new RemoveCartItem(cartRepository),
+
+  }
+
 }

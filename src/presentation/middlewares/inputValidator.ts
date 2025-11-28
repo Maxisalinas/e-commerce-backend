@@ -5,6 +5,7 @@ import { ZodType } from 'zod';
 export function validateInput(validationSchema: ZodType<any, any>, inputSource: 'body' | 'query' | 'params' | 'headers' | 'cookies') {
     
     return (req: Request, _res: Response, next: NextFunction) => {
+        
         try {
             const inputParsed = validationSchema.parse(req[inputSource]);
             
@@ -19,13 +20,13 @@ export function validateInput(validationSchema: ZodType<any, any>, inputSource: 
             } else {
                 (req as any).bodyParsed = inputParsed;
             }
-            
-            req[inputSource] = inputParsed;
+
             next();
 
         } catch (error) {
             next(error);
         }
+
     }
     
 }

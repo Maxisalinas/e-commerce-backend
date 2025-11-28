@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { envs } from "../../config/envs.js";
 import { validateInput } from "../middlewares/inputValidator.js";
-import { IdParamSchema } from "../helpers/id-validation.js";
 import { asyncHandler } from "../middlewares/asyncHandler.js";
 import { UserController } from "./controller.js";
+import { UUIDParamSchema } from "../helpers/id-validation.js";
 import { RegisterUserSchema } from "./dtos/input/register-schema.js";
 import { GetManyUsersSchema } from "./dtos/input/getmany-schema.js";
 import { UpdateUserSchema } from "./dtos/input/update-schema.js";
@@ -20,7 +20,7 @@ export class UsersRoutes {
         router.get('/:id', 
             validateAccessToken(JsonWebToken, envs.JWT_SECRET_KEY),
             authorizeRole('ADMIN'),
-            validateInput(IdParamSchema, 'params'), 
+            validateInput(UUIDParamSchema, 'params'), 
             asyncHandler(userController.getById)
         );
         // TODO: route /me, para que el usuario pueda obtener sus propios datos.
@@ -40,7 +40,7 @@ export class UsersRoutes {
         router.put('/:id', 
             validateAccessToken(JsonWebToken, envs.JWT_SECRET_KEY),
             authorizeRole('ADMIN'),
-            validateInput(IdParamSchema, 'params'), 
+            validateInput(UUIDParamSchema, 'params'), 
             validateInput(UpdateUserSchema, 'body'), 
             asyncHandler(userController.update)
         );
@@ -50,7 +50,7 @@ export class UsersRoutes {
         router.delete('/:id', 
             validateAccessToken(JsonWebToken, envs.JWT_SECRET_KEY),
             authorizeRole('ADMIN'),
-            validateInput(IdParamSchema, 'params'), 
+            validateInput(UUIDParamSchema, 'params'), 
             asyncHandler(userController.delete)
         );
         // TODO: route /me, para que el usuario pueda borrar su propio registro.

@@ -2,10 +2,7 @@ import { ProductEntity } from "../../../domain/product/entity.js";
 import { ProductRepository } from "../../../domain/product/repository.js";
 import { CreateProductDTO } from "../../../presentation/product/dtos/input/create.js";
 import { ProductResponseDTO } from "../../../presentation/product/dtos/output/response.js";
-
-export interface CreateProductUseCase {
-    execute( createProductDTO: CreateProductDTO ): Promise<ProductResponseDTO>,
-}
+import type { CreateProductUseCase } from "../interfaces/create-use-case.js";
 
 export class CreateProduct implements CreateProductUseCase {
 
@@ -14,7 +11,7 @@ export class CreateProduct implements CreateProductUseCase {
     ) {}
 
     public async execute(createProductDTO: CreateProductDTO): Promise<ProductResponseDTO> {
-        const product: ProductEntity = ProductEntity.fromObject(createProductDTO);
+        const product = ProductEntity.fromObject(createProductDTO);
         const newProduct = await this.productRepository.create(product);
         return new ProductResponseDTO(newProduct);
     }

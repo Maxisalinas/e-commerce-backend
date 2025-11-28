@@ -14,11 +14,10 @@ export class ProductResponseDTO {
         this.categoryId = product.categoryId;
         this.name = product.name;
         this.description = product.description;
-        this.price = parseFloat(product.price.toString()); 
+        this.price = product.price.toNumber();
         this.stock = product.stock;
         this.imageUrl = product.imageUrl;
     }
 
 }
 
-// RECORDATORIO, podriamos checkear el role para omitir enviar ciertos datos.

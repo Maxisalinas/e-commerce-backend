@@ -1,12 +1,9 @@
-import { ProductEntity } from "../../../domain/product/entity.js";
 import { ProductRepository } from "../../../domain/product/repository.js";
 import { GetManyProductsDTO } from "../../../presentation/product/dtos/input/getmany.js";
 import { ProductResponseDTO } from "../../../presentation/product/dtos/output/response.js";
-import type { ProductFilter } from "./interfaces/filter.js";
+import type { ProductFilter } from "../interfaces/filter.js";
+import type { GetManyProductsUseCase } from "../interfaces/getmany-use-case.js";
 
-export interface GetManyProductsUseCase {
-    execute( getManyProductsDTO: GetManyProductsDTO ): Promise<ProductResponseDTO[]>,
-}
 
 export class GetManyProducts implements GetManyProductsUseCase {
 
@@ -15,7 +12,6 @@ export class GetManyProducts implements GetManyProductsUseCase {
     ) {}
 
     public async execute(getManyProductsDTO: GetManyProductsDTO): Promise<ProductResponseDTO[]> {
-
         const productFilter: ProductFilter = {
             page: getManyProductsDTO.page,
             limit: getManyProductsDTO.limit,
@@ -24,11 +20,8 @@ export class GetManyProducts implements GetManyProductsUseCase {
             minPrice: getManyProductsDTO.minPrice,
             maxPrice: getManyProductsDTO.maxPrice
         }
-
-        const products: ProductEntity[] = await this.productRepository.getMany(productFilter);
-        const productsResponseDTO: ProductResponseDTO[] = products.map( product => new ProductResponseDTO(product) );
-        return productsResponseDTO;
-
+        const products = await this.productRepository.getMany(productFilter);
+        return products.map( product => new ProductResponseDTO(product) );
     }
 
 }

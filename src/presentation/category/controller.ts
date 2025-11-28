@@ -22,33 +22,34 @@ export class CategoryController {
 
     public getById = async ( req: Request, res: Response ) => {
         const id: number = (req as any).paramsParsed.id;
-        const category: CategoryResponseDTO = await this.getCategoryByIdUseCase.execute(id);
-        return res.status(200).json(category);
+        const response: CategoryResponseDTO = await this.getCategoryByIdUseCase.execute(id);
+        return res.status(200).json(response);
     }
 
     public getMany = async ( req: Request, res: Response ) => {
         const getManyCategoriesDTO = new GetManyCategoriesDTO((req as any).queryParsed);
-        const categories: CategoryResponseDTO[] = await this.getManyCategoriesUseCase.execute(getManyCategoriesDTO);
-        return res.status(200).json(categories);
+        const response: CategoryResponseDTO[] = await this.getManyCategoriesUseCase.execute(getManyCategoriesDTO);
+        return res.status(200).json(response);
     }
 
     public create = async ( req: Request, res: Response ) => {
         const createCategoryDTO = new CreateCategoryDTO((req as any).bodyParsed);
-        const newCategory: CategoryResponseDTO = await this.createCategoryUseCase.execute(createCategoryDTO);
-        return res.status(201).json(newCategory);
+        const response: CategoryResponseDTO = await this.createCategoryUseCase.execute(createCategoryDTO);
+        return res.status(201).json(response);
     }
     
     public update = async ( req: Request, res: Response ) => {
         const id: number = (req as any).paramsParsed.id;
         const updateCategoryDTO = new UpdateCategoryDTO((req as any).bodyParsed);
-        const updatedCategory: CategoryResponseDTO = await this.updateCategoryUseCase.execute(id, updateCategoryDTO);
-        return res.status(200).json(updatedCategory);
+        const response: CategoryResponseDTO = await this.updateCategoryUseCase.execute(id, updateCategoryDTO);
+        return res.status(200).json(response);
     }
 
     public delete = async ( req: Request, res: Response ) => {
         const id: number = (req as any).paramsParsed.id;
         await this.deleteCategoryUseCase.execute(id);
-        return res.status(200).json({ message: 'Categoría eliminada correctamente.' });
+        const response = { message: 'Categoría eliminada correctamente.' }
+        return res.status(200).json(response);
     }
 
 }

@@ -11,7 +11,8 @@ export class DeleteUser implements DeleteUserUseCase {
     ) {}
 
     public async execute( id: string ): Promise<void> {
-        await this.userRepository.delete( id );
+        await this.userRepository.getById(id)
+        await this.userRepository.delete(id);
         return;
     }
 

@@ -1,10 +1,7 @@
 import { ProductEntity } from "../../../domain/product/entity.js";
 import { ProductRepository } from "../../../domain/product/repository.js";
 import { ProductResponseDTO } from "../../../presentation/product/dtos/output/response.js";
-
-export interface GetProductByIdUseCase {
-    execute( id: number ): Promise<ProductResponseDTO>,
-}
+import type { GetProductByIdUseCase } from "../interfaces/get-by-id-use-case.js";
 
 export class GetProductById implements GetProductByIdUseCase {
 

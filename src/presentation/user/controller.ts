@@ -22,20 +22,20 @@ export class UserController {
     
     public getById = async ( req: Request, res: Response ) => {
         const id: string = (req as any).paramsParsed.id;
-        const user: UserResponseDTO = await this.getUserByIdUseCase.execute(id);
-        return res.status(200).json(user);
+        const response: UserResponseDTO = await this.getUserByIdUseCase.execute(id);
+        return res.status(200).json(response);
     }
 
     public getMany = async ( req: Request, res: Response ) => {
         const getManyUsersDTO = new GetManyUsersDTO((req as any).queryParsed);
-        const users: UserResponseDTO[] = await this.getManyUsersUseCase.execute(getManyUsersDTO);
-        return res.status(200).json(users);
+        const response: UserResponseDTO[] = await this.getManyUsersUseCase.execute(getManyUsersDTO);
+        return res.status(200).json(response);
     }
 
     public register = async ( req: Request, res: Response ) => {
         const registerUserDTO = new RegisterUserDTO((req as any).bodyParsed);
-        const newUser: UserResponseDTO = await this.registerUserUseCase.execute(registerUserDTO);
-        return res.status(201).json(newUser);
+        const response: UserResponseDTO = await this.registerUserUseCase.execute(registerUserDTO);
+        return res.status(201).json(response);
     }
     
     public update = async ( req: Request, res: Response ) => {
@@ -48,7 +48,8 @@ export class UserController {
     public delete = async ( req: Request, res: Response ) => {
         const id: string = (req as any).paramsParsed.id;
         await this.deleteUserUseCase.execute(id);
-        return res.status(200).json({ message: 'Usuario eliminado correctamente.' });
+        const response = { message: 'Usuario eliminado correctamente.' }
+        return res.status(200).json(response);
     }
     
 }

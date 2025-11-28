@@ -1,3 +1,4 @@
+import { CartEntity } from "../cart/entity.js";
 
 export enum Role {
     ADMIN = 'ADMIN',
@@ -13,18 +14,22 @@ export class UserEntity {
         public readonly role?: Role,
         public readonly createdAt?: Date,
         public readonly updatedAt?: Date,
+        public readonly cart?: CartEntity,
     ) {}
 
     public static fromObject(object: any): UserEntity {
-        const { id, name, email, password, role, createdAt, updatedAt } = object;
+
+        const { id, name, email, password, role, createdAt, updatedAt, cart } = object;
+        
         return new UserEntity(
             name, 
-            email, 
+            email,
             password, 
             id, 
             role, 
             createdAt, 
-            updatedAt
+            updatedAt,
+            cart ? CartEntity.fromObject(cart) : undefined
         );
     }
 

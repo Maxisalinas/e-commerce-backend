@@ -5,7 +5,7 @@ import { envs } from '../../config/envs.js';
 import { CategoryController } from './controller.js';
 import { asyncHandler } from '../middlewares/asyncHandler.js';
 import { validateInput } from '../middlewares/inputValidator.js';
-import { IdParamSchema } from '../helpers/id-validation.js';
+import { IdNumParamSchema } from '../helpers/id-validation.js';
 import { GetManyCategoriesSchema } from './dtos/input/getmany-schema.js';
 import { CreateCategorySchema } from './dtos/input/create-schema.js';
 import { UpdateCategorySchema } from './dtos/input/update-schema.js';
@@ -20,7 +20,7 @@ export class CategoriesRoutes {
     const router = Router();
 
     router.get('/:id', 
-        validateInput(IdParamSchema, 'params'), 
+        validateInput(IdNumParamSchema, 'params'), 
         asyncHandler(categoryController.getById)
     );
 
@@ -39,7 +39,7 @@ export class CategoriesRoutes {
     router.put('/:id',
         validateAccessToken(JsonWebToken, envs.JWT_SECRET_KEY), 
         authorizeRole('ADMIN'),
-        validateInput(IdParamSchema, 'params'), 
+        validateInput(IdNumParamSchema, 'params'), 
         validateInput(UpdateCategorySchema, 'body'), 
         asyncHandler(categoryController.update)
     );
@@ -47,7 +47,7 @@ export class CategoriesRoutes {
     router.delete('/:id',
         validateAccessToken(JsonWebToken, envs.JWT_SECRET_KEY), 
         authorizeRole('ADMIN'),
-        validateInput(IdParamSchema, 'params'), 
+        validateInput(IdNumParamSchema, 'params'), 
         asyncHandler(categoryController.delete)
     );
 

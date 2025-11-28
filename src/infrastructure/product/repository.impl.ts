@@ -1,8 +1,7 @@
 import { prisma } from "../database/postgres/prisma-client.js";
 import { ProductRepository } from "../../domain/product/repository.js";
 import { ProductEntity } from "../../domain/product/entity.js";
-import { UpdateProductDTO } from "../../presentation/product/dtos/input/update.js";
-import type { ProductFilter } from "../../application/product/use-cases/interfaces/filter.js";
+import type { ProductFilter } from "../../application/product/interfaces/filter.js";
 import { NotFoundError } from "../errors/notFoundError.js";
 
 export class ProductRepositoryImpl implements ProductRepository {
@@ -67,7 +66,6 @@ export class ProductRepositoryImpl implements ProductRepository {
     }
 
     public async delete( id: number ): Promise<void> {
-        await this.getById(id);
         await prisma.product.delete({
             where: { id }
         });

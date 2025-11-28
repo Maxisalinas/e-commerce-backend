@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { ProductController } from './controller.js';
 import { asyncHandler } from '../middlewares/asyncHandler.js';
 import { validateInput } from '../middlewares/inputValidator.js';
-import { IdParamSchema } from '../helpers/id-validation.js';
+import { IdNumParamSchema } from '../helpers/id-validation.js';
 import { GetManyProductsSchema } from './dtos/input/getmany-schema.js';
 import { CreateProductSchema } from './dtos/input/create-schema.js';
 import { UpdateProductSchema } from './dtos/input/update-schema.js';
@@ -18,7 +18,7 @@ export class ProductsRoutes {
         const router = Router();
 
         router.get('/:id', 
-            validateInput(IdParamSchema, 'params'), 
+            validateInput(IdNumParamSchema, 'params'), 
             asyncHandler(productController.getById)
         );
 
@@ -37,7 +37,7 @@ export class ProductsRoutes {
         router.put('/:id', 
             validateAccessToken(JsonWebToken, envs.JWT_SECRET_KEY),
             authorizeRole('ADMIN'),
-            validateInput(IdParamSchema, 'params'), 
+            validateInput(IdNumParamSchema, 'params'), 
             validateInput(UpdateProductSchema, 'body'), 
             asyncHandler(productController.update)
         );
@@ -45,7 +45,7 @@ export class ProductsRoutes {
         router.delete('/:id', 
             validateAccessToken(JsonWebToken, envs.JWT_SECRET_KEY),
             authorizeRole('ADMIN'),
-            validateInput(IdParamSchema, 'params'), 
+            validateInput(IdNumParamSchema, 'params'), 
             asyncHandler(productController.delete)
         );
     

@@ -13,16 +13,12 @@ export function validateAccessToken(jwt: JWTGenerator, secret: string) {
        
         const tokenFromHeader = authHeader?.split(' ')[1]; 
         const tokenFromCookie = req.cookies?.refresh_token;
-
-        if (!tokenFromHeader && !tokenFromCookie) 
-            throw new AuthenticationError('Falta el token de autenticación (access_token o refresh_token).', 'TOKEN_MISSING');
+        if (!tokenFromHeader && !tokenFromCookie) throw new AuthenticationError('Falta el token de autenticación (access_token o refresh_token).', 'TOKEN_MISSING');
 
         if (tokenFromHeader) {   
                 const payload = jwt.verifyToken(tokenFromHeader, secret);
-                if (!payload) 
-                    throw new AuthenticationError('El access_token es inválido.', 'INVALID_ACCESS_TOKEN');
+                if (!payload) throw new AuthenticationError('El access_token es inválido.', 'INVALID_ACCESS_TOKEN');
                 
-                // Si el access_token es válido, lo adjuntamos y continuamos
                 (req as any).payload = payload;
                 return next(); 
         }

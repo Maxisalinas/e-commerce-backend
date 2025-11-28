@@ -10,13 +10,12 @@ export class RefreshToken implements RefreshTokenUseCase {
     ) {}
 
     public async execute(payload: JWTPayload ): Promise<string> {
-
         const accessToken = this.jwt.generateToken( 
             payload,
             envs.JWT_SECRET_KEY, 
             { expiresIn: '15m' }
         )
-
         return accessToken;
     }
+
 }

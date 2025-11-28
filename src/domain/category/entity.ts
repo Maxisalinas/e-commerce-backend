@@ -1,8 +1,8 @@
 export class CategoryEntity {
 
     constructor(
-        public readonly name: string,
-        public readonly id?: number
+        public readonly id: number,
+        public readonly name: string
     ) {}
     
     public static fromObject(object: any): CategoryEntity {

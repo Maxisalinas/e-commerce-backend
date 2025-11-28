@@ -1,8 +1,5 @@
 import { ProductRepository } from "../../../domain/product/repository.js";
-
-export interface DeleteProductUseCase {
-    execute( id: number ): Promise<void>,
-}
+import type { DeleteProductUseCase } from "../interfaces/delete-use-case.js";
 
 export class DeleteProduct implements DeleteProductUseCase {
 
@@ -11,8 +8,9 @@ export class DeleteProduct implements DeleteProductUseCase {
     ) {}
 
     public async execute( id: number ): Promise<void> {
-        const deletedProduct = await this.productRepository.delete( id );
-        return deletedProduct;  // REVISAR
+        await this.productRepository.getById(id);
+        await this.productRepository.delete(id);
+        return;
     }
 
 }

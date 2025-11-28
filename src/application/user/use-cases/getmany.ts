@@ -13,7 +13,6 @@ export class GetManyUsers implements GetManyUsersUseCase {
     ) {}
 
     public async execute(getManyUsersDTO: GetManyUsersDTO): Promise<UserResponseDTO[]> {
-
         const userFilter: UserFilter = {
             page: getManyUsersDTO.page,
             limit: getManyUsersDTO.limit,
@@ -21,10 +20,8 @@ export class GetManyUsers implements GetManyUsersUseCase {
             role: getManyUsersDTO.role,
         };
 
-        const users: UserEntity[] = await this.userRepository.getMany(userFilter);
-        const usersResponseDTO: UserResponseDTO[] = users.map( user => new UserResponseDTO(user) );
-        return usersResponseDTO;
-
+        const users = await this.userRepository.getMany(userFilter);
+        return users.map(user => new UserResponseDTO(user));
     }
 
 }

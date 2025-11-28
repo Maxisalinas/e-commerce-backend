@@ -19,10 +19,13 @@ export class GetManyCategories implements GetManyCategoriesUseCase {
 
         const categoryFilter: CategoryFilter = {
             // TODO
-            // property: getManyCategoriesDTO.property
+            // property1: getManyCategoriesDTO.property1
+            // property2: getManyCategoriesDTO.property2
+            // property3: getManyCategoriesDTO.property3
+            // etc...
         };
-        const categories: CategoryEntity[] = await this.categoryRepository.getMany( categoryFilter );
-        return categories.map( category => new CategoryResponseDTO(category) ); 
+        const categories = await this.categoryRepository.getMany(categoryFilter);
+        return categories.map(category => new CategoryResponseDTO(category)); 
     }
 
 }

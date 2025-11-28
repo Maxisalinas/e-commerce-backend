@@ -1,6 +1,6 @@
 import { UserEntity } from "../../../domain/user/entity.js";
 import { UserRepository } from "../../../domain/user/repository.js";
-import { UpdateUserUseCase } from "../interfaces/update-use-case.js";
+import type { UpdateUserUseCase } from "../interfaces/update-use-case.js";
 import { UpdateUserDTO } from "../../../presentation/user/dtos/input/update.js";
 import { UserResponseDTO } from "../../../presentation/user/dtos/output/response.js";
 

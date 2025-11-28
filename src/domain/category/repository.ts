@@ -1,7 +1,5 @@
-import { CategoryFilter } from "../../application/category/use-cases/getmany.js";
-import { UpdateCategoryDTO } from "../../presentation/category/dtos/input/update.js";
-
 import { CategoryEntity } from "./entity.js";
+import type { CategoryFilter } from "../../application/category/use-cases/getmany.js";
 
 export abstract class CategoryRepository {
     

@@ -44,18 +44,4 @@ export class ProductEntity {
         return objects.map(obj => ProductEntity.fromObject(obj));
     }
 
-    // public static fromNewObject(object: any): ProductEntity {
-                
-    //     const { id = undefined, categoryId, name, description, price, stock, imageUrl } = object;
-
-    //     return new ProductEntity(
-    //         id,
-    //         categoryId,
-    //         name,
-    //         description,
-    //         price,
-    //         stock,
-    //         imageUrl,
-    //     );
-    // }
 }

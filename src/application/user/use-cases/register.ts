@@ -16,7 +16,7 @@ export class RegisterUser implements RegisterUserUseCase {
 
     public async execute(registerUserDTO: RegisterUserDTO): Promise<UserResponseDTO> {
         registerUserDTO.password = await this.passwordHasher.hash(registerUserDTO.password);
-        const user: UserEntity = UserEntity.fromObject(registerUserDTO);
+        const user = UserEntity.fromObject(registerUserDTO);
         const exist = await this.userRepository.getByEmail(user.email);
         if (exist !== null) throw new DatabaseValidationError('Ya existe un usuario con el correo electrónico proporcionado.'); 
         const newUser = await this.userRepository.register(user);

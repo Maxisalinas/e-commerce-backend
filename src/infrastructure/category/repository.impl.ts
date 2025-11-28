@@ -1,7 +1,6 @@
 import { prisma } from "../database/postgres/prisma-client.js";
 import { CategoryEntity } from "../../domain/category/entity.js";
 import { CategoryRepository } from "../../domain/category/repository.js";
-import { UpdateCategoryDTO } from "../../presentation/category/dtos/input/update.js";
 import { CategoryFilter } from "../../application/category/use-cases/getmany.js";
 import { NotFoundError } from "../errors/notFoundError.js";
 
@@ -15,23 +14,20 @@ export class CategoryRepositoryImpl implements CategoryRepository {
             }
         });
         if (!category) throw new NotFoundError('No se encontró una categoría con el número de ID proporcionado.');
-        const categoryEntity: CategoryEntity = CategoryEntity.fromObject(category);
-        return categoryEntity;
+        return CategoryEntity.fromObject(category);
+        
     }
     
     public async getMany( filter: CategoryFilter ): Promise<CategoryEntity[]> {
-        
         const categories = await prisma.category.findMany(); 
-        const categoryEntities = CategoryEntity.fromObjectList(categories);
-        return categoryEntities;
+        return CategoryEntity.fromObjectList(categories);
     }
 
     public async create( category: CategoryEntity ): Promise<CategoryEntity> {
         const newCategory = await prisma.category.create({
             data: category
         });
-        const categoryEntity = CategoryEntity.fromObject(newCategory);
-        return categoryEntity;
+        return CategoryEntity.fromObject(newCategory);
     }
 
     public async update(category: CategoryEntity): Promise<CategoryEntity> {
@@ -46,11 +42,9 @@ export class CategoryRepositoryImpl implements CategoryRepository {
     }
 
     public async delete( id: number ): Promise<void> {
-        await this.getById(id);
         await prisma.category.delete({
             where: { id }
         });
-        
         return;
     }
 

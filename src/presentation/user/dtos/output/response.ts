@@ -1,22 +1,23 @@
 import { UserEntity } from "../../../../domain/user/entity.js";
+import { CartResponseDTO } from "../../../cart/dtos/output/response.js";
 
 export class UserResponseDTO {
-
-    public readonly id: string;
-    public readonly name: string;
-    public readonly email: string;
-    public readonly role: string;
-    public readonly createdAt: Date;
-    public readonly updatedAt: Date;
-    
+    public readonly id!: string;
+    public readonly name!: string;
+    public readonly email!: string;
+    public readonly role!: string;
+    public readonly cart!: CartResponseDTO;
 
     constructor(user: UserEntity) {
-        this.id = user.id!;
-        this.name = user.name;
-        this.email = user.email;
-        this.role = user.role!;
-        this.createdAt = user.createdAt!;
-        this.updatedAt = user.updatedAt!;
-    }
 
+        // Excluimos el campo `password` y extraemos los datos necesarios
+        const { password, createdAt, updatedAt,...userData } = user;
+
+        // Asignamos las propiedades del objeto userData al DTO
+        Object.assign(this, userData);
+
+        this.cart = new CartResponseDTO(user.cart!);
+
+    }
 }
+

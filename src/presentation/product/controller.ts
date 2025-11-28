@@ -1,14 +1,13 @@
 import { Request, Response } from 'express';
-import type { GetManyProductsUseCase } from '../../application/product/use-cases/getmany.js';
-import type { CreateProductUseCase } from '../../application/product/use-cases/create.js';
-import type { GetProductByIdUseCase } from '../../application/product/use-cases/get-by-id.js';
-import type { UpdateProductUseCase } from '../../application/product/use-cases/update.js';
-import type { DeleteProductUseCase } from '../../application/product/use-cases/delete.js';
+import type { CreateProductUseCase } from '../../application/product/interfaces/create-use-case.js';
+import type { DeleteProductUseCase } from '../../application/product/interfaces/delete-use-case.js';
+import type { GetProductByIdUseCase } from '../../application/product/interfaces/get-by-id-use-case.js';
+import type { GetManyProductsUseCase } from '../../application/product/interfaces/getmany-use-case.js';
+import type { UpdateProductUseCase } from '../../application/product/interfaces/update-use-case.js';
 import { GetManyProductsDTO } from './dtos/input/getmany.js';
 import { ProductResponseDTO } from './dtos/output/response.js';
 import { UpdateProductDTO } from './dtos/input/update.js';
 import { CreateProductDTO } from './dtos/input/create.js';
-
 
 export class ProductController {
 
@@ -22,33 +21,34 @@ export class ProductController {
     
     public getById = async ( req: Request, res: Response ) => {
         const id: number = (req as any).paramsParsed.id;
-        const product: ProductResponseDTO = await this.getProductByIdUseCase.execute(id);
-        return res.status(200).json(product);
+        const response: ProductResponseDTO = await this.getProductByIdUseCase.execute(id);
+        return res.status(200).json(response);
     }
 
     public getMany = async ( req: Request, res: Response ) => {
         const getManyProductsDTO = new GetManyProductsDTO((req as any).queryParsed);
-        const products: ProductResponseDTO[] = await this.getManyProductsUseCase.execute(getManyProductsDTO);
-        return res.status(200).json(products);
+        const response: ProductResponseDTO[] = await this.getManyProductsUseCase.execute(getManyProductsDTO);
+        return res.status(200).json(response);
     }
 
     public create = async ( req: Request, res: Response ) => {
         const createProductDTO = new CreateProductDTO((req as any).bodyParsed);
-        const newProduct: ProductResponseDTO = await this.createProductUseCase.execute(createProductDTO);
-        return res.status(201).json(newProduct);
+        const response: ProductResponseDTO = await this.createProductUseCase.execute(createProductDTO);
+        return res.status(201).json(response);
     }
 
     public update = async ( req: Request, res: Response ) => {
         const id: number = (req as any).paramsParsed.id;
         const updatedProductDTO = new UpdateProductDTO((req as any).bodyParsed);
-        const updatedProduct: ProductResponseDTO = await this.updateProductUseCase.execute(id, updatedProductDTO);
-        return res.status(200).json(updatedProduct);
+        const response: ProductResponseDTO = await this.updateProductUseCase.execute(id, updatedProductDTO);
+        return res.status(200).json(response);
     }
     
     public delete = async ( req: Request, res: Response ) => {
         const id: number = (req as any).paramsParsed.id;
         await this.deleteProductUseCase.execute(id);
-        return res.status(200).json({ message: 'Producto eliminado correctamente.' });
+        const response = { message: 'Producto eliminado correctamente.' }
+        return res.status(200).json(response);
     }
     
 }

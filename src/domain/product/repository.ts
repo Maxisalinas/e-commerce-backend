@@ -1,5 +1,5 @@
 import { ProductEntity } from "./entity.js";
-import { ProductFilter } from "../../application/product/use-cases/interfaces/filter.js";
+import { ProductFilter } from "../../application/product/interfaces/filter.js";
 
 export abstract class ProductRepository {
     
