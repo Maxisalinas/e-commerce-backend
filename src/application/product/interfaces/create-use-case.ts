@@ -2,5 +2,5 @@ import { CreateProductDTO } from "../../../presentation/product/dtos/input/creat
 import { ProductResponseDTO } from "../../../presentation/product/dtos/output/response.js";
 
 export interface CreateProductUseCase {
-    execute( createProductDTO: CreateProductDTO ): Promise<ProductResponseDTO>,
+    execute(createProductDTO: CreateProductDTO): Promise<ProductResponseDTO>;
 }

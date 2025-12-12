@@ -2,5 +2,5 @@ import { UpdateProductDTO } from "../../../presentation/product/dtos/input/updat
 import { ProductResponseDTO } from "../../../presentation/product/dtos/output/response.js";
 
 export interface UpdateProductUseCase {
-    execute( id: number, updateProductDTO: UpdateProductDTO ): Promise<ProductResponseDTO>,
+    execute(id: number, updateProductDTO: UpdateProductDTO): Promise<ProductResponseDTO>;
 }

@@ -1,9 +1,12 @@
 import { ZodError } from 'zod';
 import { DatabaseValidationError } from '../../infrastructure/errors/databaseValidationError.js';
 import { DatabaseError } from '../../infrastructure/errors/databaseError.js';
-import { NotFoundError } from '../../infrastructure/errors/notFoundError.js';
-import { AuthenticationError } from '../../application/errors/authenticationError.js';
-import { AuthorizationError } from '../../application/errors/authorizationError.js';
+import { NotFoundError } from '../../application/errors/notFoundError.js';
+import { AuthenticationError } from '../../application/auth/errors/authenticationError.js';
+import { AuthorizationError } from '../../application/auth/errors/authorizationError.js';
+import { InvalidOrderStatusError } from '../../domain/order/errors/invalidOrderStatusError .js';
+import { OrderAlreadyCancelledError } from '../../domain/order/errors/orderAlreadyCancelledError.js';
+
 
 export interface ErrorResponse {
     status: number;
@@ -62,6 +65,26 @@ export function errorHandler(error: unknown): ErrorResponse {
         }
     }
 
+
+
+    if (error instanceof InvalidOrderStatusError) {
+        return {
+            status: 400, 
+            message: error.message,
+            details: error.details,  
+        };
+    }
+
+
+    if (error instanceof OrderAlreadyCancelledError) {
+        return {
+            status: 400, 
+            message: error.message,
+            details: error.details,
+        };
+    }
+
+
     if (error instanceof Error) {
         console.error('Error inesperado:', error.message);
 
@@ -77,4 +100,5 @@ export function errorHandler(error: unknown): ErrorResponse {
         status: 500,
         message: 'Error desconocido',
     }
+
 }

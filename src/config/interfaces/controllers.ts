@@ -1,7 +1,8 @@
+import { ProductController } from "../../presentation/product/controller.js";
+import { CategoryController } from "../../presentation/category/controller.js";
 import { AuthController } from "../../presentation/auth/controller.js";
 import { CartController } from "../../presentation/cart/controller.js";
-import { CategoryController } from "../../presentation/category/controller.js";
-import { ProductController } from "../../presentation/product/controller.js";
+import { OrderController } from "../../presentation/order/controller.js";
 import { UserController } from "../../presentation/user/controller.js";
 
 export interface Controllers {
@@ -10,4 +11,5 @@ export interface Controllers {
     userController: UserController;
     authController: AuthController;
     cartController: CartController;
+    orderController: OrderController;
 }

@@ -25,7 +25,8 @@ model Product {
   imageUrl    String    @db.VarChar(2048)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  cartItems   CartItem[] // Relación inversa hacia CartItem
+  cartItems   CartItem[] 
+  orderItems  OrderItem[]
 }
 
 enum Role {
@@ -37,11 +38,13 @@ model User {
   id        String   @id @default(uuid())
   name      String   @db.VarChar(30)
   email     String   @unique @db.VarChar(30)
-  password  String   @db.VarChar(255) // Encriptada
+  password  String   @db.VarChar(255)
   role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  cart      Cart     // Relación obligatoria: cada usuario tiene un carrito
+  cart      Cart?  
+  orders    Order[]  
+
 }
 
 model Cart {
@@ -62,4 +65,91 @@ model CartItem {
   quantity  Int       @default(1)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+}
+
+
+enum OrderStatus {
+  PENDING
+  PAID
+  FAILED
+  CANCELLED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+}
+
+enum PaymentStatus {
+  UNPAID
+  PAID
+  REFUNDED
+  EXPIRED
+}
+
+model Order {
+  id               String        @id @default(uuid())
+  user             User          @relation(fields: [userId], references: [id])
+  userId           String
+  status           OrderStatus   @default(PENDING)
+  paymentStatus    PaymentStatus @default(UNPAID)
+  totalAmount      Decimal       @db.Decimal(10, 2)
+  currency         String        @default("USD")
+  shippingMethod   ShippingMethod @relation(fields: [shippingMethodId], references: [id])
+  shippingMethodId String
+  shippingName     String
+  shippingStreet   String
+  shippingCity     String
+  shippingState    String
+  shippingZip      String
+  shippingCountry  String
+  shippingPhone    String?
+  shippingCost     Decimal @default(0) @db.Decimal(10, 2)
+  billingName      String
+  billingStreet    String
+  billingCity      String
+  billingState     String
+  billingZip       String
+  billingCountry   String
+  items            OrderItem[]
+  payments         Payment[]
+  discount         Decimal @default(0) @db.Decimal(10, 2)
+  notes            String?   @db.Text
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model ShippingMethod {
+  id            String   @id @default(uuid())
+  name          String
+  price         Decimal  @db.Decimal(10, 2)
+  estimatedDays Int
+  active        Boolean  @default(true)
+
+  orders        Order[]
+}
+
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  order     Order    @relation(fields: [orderId], references: [id])
+  orderId   String  
+  product   Product  @relation(fields: [productId], references: [id])
+  productId Int
+  name      String  
+  price     Decimal   @db.Decimal(10, 2)
+  quantity  Int
+  subtotal  Decimal   @db.Decimal(10, 2)
+}
+
+model Payment {
+  id              String   @id @default(uuid())
+  order           Order    @relation(fields: [orderId], references: [id])
+  orderId         String  
+
+  provider        String
+  paymentIntentId String
+  method          String
+  last4           String?
+  paidAt          DateTime?
+
+  createdAt       DateTime @default(now())
 }

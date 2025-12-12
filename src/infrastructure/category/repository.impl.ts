@@ -2,7 +2,7 @@ import { prisma } from "../database/postgres/prisma-client.js";
 import { CategoryEntity } from "../../domain/category/entity.js";
 import { CategoryRepository } from "../../domain/category/repository.js";
 import { CategoryFilter } from "../../application/category/use-cases/getmany.js";
-import { NotFoundError } from "../errors/notFoundError.js";
+import { NotFoundError } from "../../application/errors/notFoundError.js";
 
 export class CategoryRepositoryImpl implements CategoryRepository {
     

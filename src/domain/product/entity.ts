@@ -14,29 +14,16 @@ export class ProductEntity {
     ) {}
 
     public static fromObject(object: any): ProductEntity {
-        
-        const { 
-            id, 
-            categoryId, 
-            name,
-            description, 
-            price, 
-            stock, 
-            imageUrl, 
-            createdAt, 
-            updatedAt 
-        } = object;
-
         return new ProductEntity(
-            id,
-            categoryId,
-            name,
-            description,
-            price,
-            stock,
-            imageUrl,
-            createdAt,
-            updatedAt
+            object.id,
+            object.categoryId,
+            object.name,
+            object.description,
+            object.price,
+            object.stock,
+            object.imageUrl,
+            object.createdAt,
+            object.updatedAt
         );
     }
 

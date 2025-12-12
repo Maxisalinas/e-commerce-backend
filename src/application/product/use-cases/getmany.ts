@@ -12,6 +12,7 @@ export class GetManyProducts implements GetManyProductsUseCase {
     ) {}
 
     public async execute(getManyProductsDTO: GetManyProductsDTO): Promise<ProductResponseDTO[]> {
+
         const productFilter: ProductFilter = {
             page: getManyProductsDTO.page,
             limit: getManyProductsDTO.limit,
@@ -21,7 +22,8 @@ export class GetManyProducts implements GetManyProductsUseCase {
             maxPrice: getManyProductsDTO.maxPrice
         }
         const products = await this.productRepository.getMany(productFilter);
-        return products.map( product => new ProductResponseDTO(product) );
+        return ProductResponseDTO.fromEntityList(products);
+        
     }
 
 }

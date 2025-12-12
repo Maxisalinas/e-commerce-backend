@@ -11,8 +11,10 @@ export class GetCategoryById implements GetCategoryByIdUseCase {
     ) {}
 
     public async execute( id: number ): Promise<CategoryResponseDTO> {
+
         const category: CategoryEntity = await this.categoryRepository.getById( id );
         return new CategoryResponseDTO(category);
+        
     }
 
 }

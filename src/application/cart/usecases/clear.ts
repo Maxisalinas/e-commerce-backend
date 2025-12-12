@@ -10,8 +10,10 @@ export class ClearCart implements ClearCartUseCase {
     ) {}
 
     public async execute( id: string ): Promise<CartResponseDTO> {
+
         await this.cartRepository.getById(id);
         const clearedCart = await this.cartRepository.clear(id);
         return new CartResponseDTO(clearedCart);
+        
     }
 }

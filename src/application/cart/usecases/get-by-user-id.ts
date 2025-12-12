@@ -10,7 +10,10 @@ export class GetCartByUserId implements GetCartByUserIdUseCase {
     ) {}
 
     public async execute( id: string ): Promise<CartResponseDTO> {
+
         const cart = await this.cartRepository.getByUserId(id);
         return new CartResponseDTO(cart);
+
     }
+    
 }

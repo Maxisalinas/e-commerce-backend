@@ -5,9 +5,9 @@ import { CartRepository } from "../../../domain/cart/repository.js";
 import { CartItemEntity } from "../../../domain/cartItem/entity.js";
 import { LoginUserDTO } from "../../../presentation/user/dtos/input/login.js";
 import { UserResponseDTO } from "../../../presentation/user/dtos/output/response.js";
-import { CartItemDTO } from "../../../presentation/cart/dtos/input/item.js";
+import { TemporaryCartItemDTO } from "../../../presentation/cart/dtos/input/temporary-item.js";
+import { LoginResponseDTO } from "../../../presentation/auth/dtos/output/login-response.js";
 import type { LoginUserUseCase } from "../interfaces/login-use-case.js";
-import type { LoginResponseDTO } from "../../../presentation/auth/dtos/output/login-response.js";
 import type { JWTGenerator } from "../interfaces/jwt-generator.js";
 import type { PasswordHasher } from "../../user/interfaces/password-hasher.js";
 
@@ -18,11 +18,10 @@ export class LoginUser implements LoginUserUseCase {
         private readonly cartRepository: CartRepository,
         private readonly passwordHasher: PasswordHasher,
         private readonly jwt: JWTGenerator,
-    
     ) {}
 
-    public async execute(loginUserDTO: LoginUserDTO, temporaryCart?: CartItemDTO[]): Promise<LoginResponseDTO> {
-
+    public async execute(loginUserDTO: LoginUserDTO, temporaryCart?: TemporaryCartItemDTO[]): Promise<LoginResponseDTO> {
+        
         const user = await this.userRepository.getByEmail(loginUserDTO.email);
         if (user === null) throw new AuthenticationError('El correo o la contraseña es incorrecto.');
 
@@ -42,18 +41,16 @@ export class LoginUser implements LoginUserUseCase {
         )
         
         if(temporaryCart) {
+            temporaryCart.forEach(item => {
+                item.cartId = user.cart!.id; 
+            });
             const itemEntities = CartItemEntity.fromObjectList(temporaryCart);
             await Promise.all(itemEntities.map(item => this.cartRepository.addItem(item)));
         }
 
-        // TODO REASIGNAR EL USER CON EL CARRITO ACTUALIZADO
-        const userLogged: LoginResponseDTO = { 
-            user: new UserResponseDTO(user),
-            accessToken, 
-            refreshToken 
-        }
-
-        return userLogged;
+        const userUpdated = await this.userRepository.getById(user.id!);
+        
+        return new LoginResponseDTO(UserResponseDTO.fromEntity(userUpdated), accessToken, refreshToken);
       
     }
 

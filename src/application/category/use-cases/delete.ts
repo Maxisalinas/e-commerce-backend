@@ -8,9 +8,11 @@ export class DeleteCategory implements DeleteCategoryUseCase {
     ) {}
 
     public async execute( id: number ): Promise<void> {
+
         await this.categoryRepository.getById(id);
         await this.categoryRepository.delete(id);
         return;
+        
     }
 
 }

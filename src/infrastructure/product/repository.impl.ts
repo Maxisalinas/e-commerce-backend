@@ -2,7 +2,7 @@ import { prisma } from "../database/postgres/prisma-client.js";
 import { ProductRepository } from "../../domain/product/repository.js";
 import { ProductEntity } from "../../domain/product/entity.js";
 import type { ProductFilter } from "../../application/product/interfaces/filter.js";
-import { NotFoundError } from "../errors/notFoundError.js";
+import { NotFoundError } from "../../application/errors/notFoundError.js";
 
 export class ProductRepositoryImpl implements ProductRepository {
     

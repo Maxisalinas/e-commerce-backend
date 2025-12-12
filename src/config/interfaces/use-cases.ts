@@ -1,58 +1,71 @@
-import { LoginUserUseCase } from "../../application/auth/interfaces/login-use-case.js";
-import { RefreshTokenUseCase } from "../../application/auth/interfaces/refresh-token-use-case.js";
-import { AddCartItemUseCase } from "../../application/cart/interfaces/add-item-use-case.js";
-import { ClearCartUseCase } from "../../application/cart/interfaces/clear-use-case.js";
-import { GetCartByIdUseCase } from "../../application/cart/interfaces/get-by-id-use-case.js";
-import { GetCartByUserIdUseCase } from "../../application/cart/interfaces/get-by-user-id-use-case.js";
-import { RemoveCartItemUseCase } from "../../application/cart/interfaces/remove-item-use-case.js";
-import { UpdateCartItemUseCase } from "../../application/cart/interfaces/update-item-use-case.js";
-import { CreateCategoryUseCase } from "../../application/category/interfaces/create-use-case.js";
-import { DeleteCategoryUseCase } from "../../application/category/interfaces/delete-use-case.js";
-import { GetCategoryByIdUseCase } from "../../application/category/interfaces/get-by-id-use-case.js";
-import { GetManyCategoriesUseCase } from "../../application/category/interfaces/getmany-use-case.js";
-import { UpdateCategoryUseCase } from "../../application/category/interfaces/update-use-case.js";
-import { CreateProductUseCase } from "../../application/product/interfaces/create-use-case.js";
-import { DeleteProductUseCase } from "../../application/product/interfaces/delete-use-case.js";
-import { GetProductByIdUseCase } from "../../application/product/interfaces/get-by-id-use-case.js";
-import { GetManyProductsUseCase } from "../../application/product/interfaces/getmany-use-case.js";
-import { UpdateProductUseCase } from "../../application/product/interfaces/update-use-case.js";
-import { GetUserByIdUseCase } from "../../application/user/interfaces/get-by-id-use-case.js";
-import { GetManyUsersUseCase } from "../../application/user/interfaces/getmany-use-case.js";
-import { RegisterUserUseCase } from "../../application/user/interfaces/register-use-case.js";
-import { UpdateUserUseCase } from "../../application/user/interfaces/update-use-case.js";
-import { DeleteUserUseCase } from "../../application/user/use-cases/delete.js";
+// Product
+import type { CreateProductUseCase } from "../../application/product/interfaces/create-use-case.js";
+import type { GetProductByIdUseCase } from "../../application/product/interfaces/get-by-id-use-case.js";
+import type { GetManyProductsUseCase } from "../../application/product/interfaces/getmany-use-case.js";
+import type { UpdateProductUseCase } from "../../application/product/interfaces/update-use-case.js";
+import type { DeleteProductUseCase } from "../../application/product/interfaces/delete-use-case.js";
+// Category
+import type { CreateCategoryUseCase } from "../../application/category/interfaces/create-use-case.js";
+import type { GetCategoryByIdUseCase } from "../../application/category/interfaces/get-by-id-use-case.js";
+import type { GetManyCategoriesUseCase } from "../../application/category/interfaces/getmany-use-case.js";
+import type { UpdateCategoryUseCase } from "../../application/category/interfaces/update-use-case.js";
+import type { DeleteCategoryUseCase } from "../../application/category/interfaces/delete-use-case.js";
+// User
+import type { RegisterUserUseCase } from "../../application/user/interfaces/register-use-case.js";
+import type { GetUserByIdUseCase } from "../../application/user/interfaces/get-by-id-use-case.js";
+import type { GetManyUsersUseCase } from "../../application/user/interfaces/getmany-use-case.js";
+import type { UpdateUserUseCase } from "../../application/user/interfaces/update-use-case.js";
+import type { DeleteUserUseCase } from "../../application/user/use-cases/delete.js";
+// auth
+import type { LoginUserUseCase } from "../../application/auth/interfaces/login-use-case.js";
+import type { RefreshTokenUseCase } from "../../application/auth/interfaces/refresh-token-use-case.js";
+// Cart
+import type { GetCartByIdUseCase } from "../../application/cart/interfaces/get-by-id-use-case.js";
+import type { GetCartByUserIdUseCase } from "../../application/cart/interfaces/get-by-user-id-use-case.js";
+import type { ClearCartUseCase } from "../../application/cart/interfaces/clear-use-case.js";
+import type { AddCartItemUseCase } from "../../application/cart/interfaces/add-item-use-case.js";
+import type { UpdateCartItemUseCase } from "../../application/cart/interfaces/update-item-use-case.js";
+import type { RemoveCartItemUseCase } from "../../application/cart/interfaces/remove-item-use-case.js";
+// Order
+import type { CheckoutUseCase } from "../../application/order/interfaces/checkout-use-case.js";
+import type { GetUserOrdersUseCase } from "../../application/order/interfaces/get-user-orders.js";
+import type { GetAllOrdersUseCase } from "../../application/order/interfaces/get-all-orders-use-case.js";
+import type { ChangeOrderStatusUseCase } from "../../application/order/interfaces/change-status-use-case.js";
 
 export interface UseCases {
+    
     // Product
-    getProductByIdUseCase: GetProductByIdUseCase,
-    getManyProductsUseCase: GetManyProductsUseCase,
-    createProductUseCase: CreateProductUseCase,
-    updateProductUseCase: UpdateProductUseCase,
-    deleteProductUseCase: DeleteProductUseCase,
-
+    getProductByIdUseCase: GetProductByIdUseCase;
+    getManyProductsUseCase: GetManyProductsUseCase;
+    createProductUseCase: CreateProductUseCase;
+    updateProductUseCase: UpdateProductUseCase;
+    deleteProductUseCase: DeleteProductUseCase;
     // Category
-    createCategoryUseCase: CreateCategoryUseCase,
-    getManyCategoriesUseCase: GetManyCategoriesUseCase,
-    getCategoryByIdUseCase: GetCategoryByIdUseCase,
-    updateCategoryUseCase: UpdateCategoryUseCase,
-    deleteCategoryUseCase: DeleteCategoryUseCase,
-
+    createCategoryUseCase: CreateCategoryUseCase;
+    getManyCategoriesUseCase: GetManyCategoriesUseCase;
+    getCategoryByIdUseCase: GetCategoryByIdUseCase;
+    updateCategoryUseCase: UpdateCategoryUseCase;
+    deleteCategoryUseCase: DeleteCategoryUseCase;
     // User
-    getUserByIdUseCase: GetUserByIdUseCase,
-    getManyUsersUseCase: GetManyUsersUseCase,
-    registerUserUseCase: RegisterUserUseCase,
-    updateUserUseCase: UpdateUserUseCase,
-    deleteUserUseCase: DeleteUserUseCase,
-
+    getUserByIdUseCase: GetUserByIdUseCase;
+    getManyUsersUseCase: GetManyUsersUseCase;
+    registerUserUseCase: RegisterUserUseCase;
+    updateUserUseCase: UpdateUserUseCase;
+    deleteUserUseCase: DeleteUserUseCase;
     // auth
-    loginUserUseCase: LoginUserUseCase,
-    refreshTokenUseCase: RefreshTokenUseCase
-
+    loginUserUseCase: LoginUserUseCase;
+    refreshTokenUseCase: RefreshTokenUseCase;
     // Cart
-    getCartByIdUseCase: GetCartByIdUseCase,
-    getCartByUserIdUseCase: GetCartByUserIdUseCase,
-    clearCartUseCase: ClearCartUseCase,
-    addCartItemUseCase: AddCartItemUseCase,
-    updateCartItemUseCase: UpdateCartItemUseCase,
-    removeCartItemUseCase: RemoveCartItemUseCase,
+    getCartByIdUseCase: GetCartByIdUseCase;
+    getCartByUserIdUseCase: GetCartByUserIdUseCase;
+    clearCartUseCase: ClearCartUseCase;
+    addCartItemUseCase: AddCartItemUseCase;
+    updateCartItemUseCase: UpdateCartItemUseCase;
+    removeCartItemUseCase: RemoveCartItemUseCase;
+    // Order
+    checkoutUseCase: CheckoutUseCase;
+    getUserOrdersUseCase: GetUserOrdersUseCase;
+    getAllOrdersUseCase: GetAllOrdersUseCase;
+    changeOrderStatusUseCase: ChangeOrderStatusUseCase;
+    
 }

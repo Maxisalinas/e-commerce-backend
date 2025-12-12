@@ -11,9 +11,11 @@ export class CreateCategory implements CreateCategoryUseCase {
     ) {}
 
     public async execute( createCategoryDTO: CreateCategoryDTO ): Promise<CategoryResponseDTO> {
+
         const category = CategoryEntity.fromObject(createCategoryDTO);
         const newCategory = await this.categoryRepository.create(category);
         return new CategoryResponseDTO(newCategory);
+        
     }
 
 }

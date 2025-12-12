@@ -2,7 +2,7 @@ import { prisma } from "../database/postgres/prisma-client.js";
 import { CartRepository } from "../../domain/cart/repository.js";
 import { CartEntity } from "../../domain/cart/entity.js";
 import { CartItemEntity } from "../../domain/cartItem/entity.js";
-import { NotFoundError } from "../errors/notFoundError.js";
+import { NotFoundError } from "../../application/errors/notFoundError.js";
 
 export class CartRepositoryImpl implements CartRepository {
 
@@ -11,7 +11,7 @@ export class CartRepositoryImpl implements CartRepository {
             where: { id },
             include: {
                 items: {
-                    include: { product: true } // Incluir datos del producto
+                    include: { product: true } 
                 }
             },
         });
@@ -71,7 +71,7 @@ export class CartRepositoryImpl implements CartRepository {
     public async getItemById(id: string): Promise<CartItemEntity> {
         const item = await prisma.cartItem.findUnique({
             where: { id },
-            include: { product: true } // Incluir datos del producto
+            include: { product: true } 
         });
         if (!item) throw new NotFoundError('No se encontró un item de carrito con el ID proporcionado.');
         return CartItemEntity.fromObject(item);

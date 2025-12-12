@@ -13,9 +13,12 @@ export class UpdateCartItem implements UpdateCartItemUseCase {
     ) {}
 
     public async execute( id: string, updateCartItemDTO: UpdateCartItemDTO ): Promise<CartResponseDTO> {
+
         await this.cartRepository.getItemById(id);
         const itemEntity = CartItemEntity.fromObject({ id, ...updateCartItemDTO });
         const updatedCart = await this.cartRepository.updateItem(itemEntity);
         return new CartResponseDTO(updatedCart);
+
     }
+    
 }

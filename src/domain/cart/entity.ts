@@ -10,23 +10,13 @@ export class CartEntity {
         public readonly updatedAt?: Date,
     ) {}
 
-    public static fromObject(object: any): CartEntity {
-        const {
-            id,
-            userId,
-            items,
-            createdAt,
-            updatedAt
-        } = object;
-
-        const itemEntities =  Array.isArray(items) ? CartItemEntity.fromObjectList(items) : [];
-
-        return new CartEntity(
-            id,
-            userId,
-            itemEntities,
-            createdAt,
-            updatedAt
+    public static fromObject(object: any): CartEntity {    
+        return new CartEntity( 
+            object.id, 
+            object.userId, 
+            CartItemEntity.fromObjectList(object.items), 
+            object.createdAt, 
+            object.updatedAt 
         );
     }
 
@@ -36,15 +26,9 @@ export class CartEntity {
 
     public getTotal(): number {
         return this.items.reduce((totalPrice: number, item: CartItemEntity) => {
-            // Acceder directamente a item.product y convertir el precio a number
-            if (item.product) {
-                const price = item.product.price.toNumber();  // Convertir Decimal a number
-                return totalPrice + (price * item.quantity);  // Sumar el total
-            }
-
-            // Si el producto no tiene precio o no es válido, no sumamos nada
-            return totalPrice;
-        }, 0);  // El valor inicial de 'total' es 0
+                const price = item.product.price.toNumber(); 
+                return totalPrice + (price * item.quantity);
+        }, 0); 
     }
 
 }

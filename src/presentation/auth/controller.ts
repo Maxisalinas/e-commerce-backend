@@ -3,9 +3,10 @@ import { envs } from '../../config/envs.js';
 import type { GetUserByIdUseCase } from '../../application/user/interfaces/get-by-id-use-case.js';
 import type { LoginUserUseCase } from "../../application/auth/interfaces/login-use-case.js";
 import type { RefreshTokenUseCase } from "../../application/auth/interfaces/refresh-token-use-case.js";
-import type { LoginResponseDTO } from './dtos/output/login-response.js';
+
 import { LoginUserDTO } from "../user/dtos/input/login.js";
 import { UserResponseDTO } from "../user/dtos/output/response.js";
+import { LoginResponseDTO } from './dtos/output/login-response.js';
 
 export class AuthController {
 
@@ -17,8 +18,6 @@ export class AuthController {
 
     public login = async ( req: Request, res: Response ) => {
         const loginUserDTO = new LoginUserDTO((req as any).bodyParsed);
-
-
         const { user, accessToken: access_token, refreshToken }: LoginResponseDTO = await this.loginUserUseCase.execute(loginUserDTO);
         return res
             .status(200)

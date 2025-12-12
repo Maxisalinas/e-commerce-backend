@@ -43,7 +43,35 @@
 - ⏳
 - ⏳
 
-## MODULO 5: payment-processing
+
+## MODULO 5: Discounts
 - ⏳
 - ⏳
 - ⏳
+
+## MODULO 6: Shipping
+- ⏳
+- ⏳
+- ⏳
+
+## MODULO 7: payment-processing
+- ⏳
+- ⏳
+- ⏳
+
+
+
+
+// commit
+
+feat(order): implementar módulo de órdenes (Order)
+- Crear entidades Order y OrderItem con relaciones correspondientes
+- Implementar flujo CRUD completo para Order
+- Agregar validaciones de entrada para la creación de ordenes
+- Añadir reglas de negocio:
+    - Validación de existencia de items en el carrito antes de crear una orden
+    - Validación de estados válidos para la orden y cambio de estado
+    - Lógica para el cálculo de totales incluyendo descuentos y costos de envío
+- Implementar errores personalizados de dominio:
+    - InvalidOrderStatusError, OrderAlreadyCancelledError, CartEmptyError
+- Ejecutar migración para la base de datos, creando las tablas de Orders, OrderItems, ShippingMethod y Payment

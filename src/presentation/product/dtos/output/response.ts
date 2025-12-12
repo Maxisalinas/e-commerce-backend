@@ -1,23 +1,31 @@
 import { ProductEntity } from "../../../../domain/product/entity.js";
 
 export class ProductResponseDTO {
-        public readonly id: number;
-        public readonly categoryId: number;
-        public readonly name: string;
-        public readonly description: string;
-        public readonly price: number;
-        public readonly stock: number;
-        public readonly imageUrl: string;
-        
-    constructor(product: ProductEntity) {
-        this.id = product.id;
-        this.categoryId = product.categoryId;
-        this.name = product.name;
-        this.description = product.description;
-        this.price = product.price.toNumber();
-        this.stock = product.stock;
-        this.imageUrl = product.imageUrl;
+    
+    constructor(
+        public readonly id: number,
+        public readonly categoryId: number,
+        public readonly name: string,
+        public readonly description: string,
+        public readonly price: number,
+        public readonly stock: number,
+        public readonly imageUrl: string,
+    ) {}
+
+
+    static fromEntity(product: ProductEntity): ProductResponseDTO {
+        return new ProductResponseDTO(
+            product.id,
+            product.categoryId,
+            product.name,
+            product.description,
+            product.price.toNumber(),
+            product.stock,
+            product.imageUrl
+        );
     }
 
+    static fromEntityList(products: ProductEntity[]): ProductResponseDTO[] {
+        return products.map(product => ProductResponseDTO.fromEntity(product)); 
+    }
 }
-

@@ -2,11 +2,12 @@ import { prisma } from "../database/postgres/prisma-client.js";
 import { UserRepository } from "../../domain/user/repository.js";
 import { UserEntity } from "../../domain/user/entity.js";
 import type { UserFilter } from "../../application/user/interfaces/user-filter.js";
-import { NotFoundError } from "../errors/notFoundError.js";
+import { NotFoundError } from "../../application/errors/notFoundError.js";
 
 export class UserRepositoryImpl implements UserRepository {
 
     public async getById( id: string ): Promise<UserEntity> { 
+
         const user = await prisma.user.findUnique({
             where: {
                     id
@@ -25,9 +26,11 @@ export class UserRepositoryImpl implements UserRepository {
         });
         if (!user) throw new NotFoundError('No se encontró un usuario con el número de ID proporcionado.');
         return UserEntity.fromObject(user);
+
     }
           
     async getByEmail(email: string): Promise<UserEntity | null> {
+
         const user = await prisma.user.findUnique({
             where: {
                 email
@@ -44,8 +47,10 @@ export class UserRepositoryImpl implements UserRepository {
                 }
             }
         });
+
         if (!user) return null;
         return UserEntity.fromObject(user);
+        
     }
         
     public async getMany( filter: UserFilter ): Promise<UserEntity[]> {
@@ -57,31 +62,22 @@ export class UserRepositoryImpl implements UserRepository {
     public async register(user: UserEntity): Promise<UserEntity> {
         const newUser = await prisma.user.create({
             data: {
-                ...user,
-                // Si `user.cart` existe, se crea el carrito junto con los ítems
-                cart: user.cart
-                    ? {
-                        create: {
-                            items: {
-                                create: user.cart.items.map(item => ({
-                                    productId: item.productId, 
-                                    quantity: item.quantity,  
-                                }))
-                            }
+                name: user.name,
+                email: user.email,
+                password: user.password,
+                role: user.role,
+                cart: {
+                    create: {
+                        items: {
+                            create: []
                         }
                     }
-                    : {
-                        // Si `user.cart` no existe creamos un carrito vacío
-                        create: {
-                            items: {
-                                create: [] 
-                            }
-                        }
-                    }
+                }
             },
             include: { cart: true }
         });
-        return UserEntity.fromObject(newUser);  
+
+        return UserEntity.fromObject(newUser);
     }
 
     public async update(user: UserEntity): Promise<UserEntity> {

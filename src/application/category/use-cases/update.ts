@@ -12,6 +12,7 @@ export class UpdateCategory implements UpdateCategoryUseCase {
     ) {}
 
     public async execute(id: number, updateCategoryDTO: UpdateCategoryDTO): Promise<CategoryResponseDTO> {
+
         const category = await this.categoryRepository.getById( id );
         const categoryEntity = CategoryEntity.fromObject({
             ...category,
@@ -19,6 +20,7 @@ export class UpdateCategory implements UpdateCategoryUseCase {
         });
         const updatedCategory = await this.categoryRepository.update(categoryEntity);
         return new CategoryResponseDTO(updatedCategory);
+        
     }
 
 }

@@ -2,5 +2,5 @@ import { CreateCategoryDTO } from "../../../presentation/category/dtos/input/cre
 import { CategoryResponseDTO } from "../../../presentation/category/dtos/output/response.js";
 
 export interface CreateCategoryUseCase {
-    execute( createCategoryDTO: CreateCategoryDTO ): Promise<CategoryResponseDTO>,
+    execute( createCategoryDTO: CreateCategoryDTO ): Promise<CategoryResponseDTO>;
 }

@@ -9,8 +9,9 @@ export class GetUserById implements GetUserByIdUseCase {
     ) {}
 
     public async execute( id: string ): Promise<UserResponseDTO> {
+
         const user = await this.userRepository.getById(id);
-        return new UserResponseDTO(user);
+        return UserResponseDTO.fromEntity(user);
     }
 
 }

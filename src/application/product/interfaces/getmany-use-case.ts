@@ -2,5 +2,5 @@ import { GetManyProductsDTO } from "../../../presentation/product/dtos/input/get
 import { ProductResponseDTO } from "../../../presentation/product/dtos/output/response.js";
 
 export interface GetManyProductsUseCase {
-    execute( getManyProductsDTO: GetManyProductsDTO ): Promise<ProductResponseDTO[]>,
+    execute(getManyProductsDTO: GetManyProductsDTO): Promise<ProductResponseDTO[]>;
 }

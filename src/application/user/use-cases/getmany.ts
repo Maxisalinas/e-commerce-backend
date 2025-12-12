@@ -1,4 +1,3 @@
-import { UserEntity } from "../../../domain/user/entity.js";
 import { UserRepository } from "../../../domain/user/repository.js";
 import { GetManyUsersDTO } from "../../../presentation/user/dtos/input/getmany.js";
 import { UserResponseDTO } from "../../../presentation/user/dtos/output/response.js";
@@ -21,7 +20,7 @@ export class GetManyUsers implements GetManyUsersUseCase {
         };
 
         const users = await this.userRepository.getMany(userFilter);
-        return users.map(user => new UserResponseDTO(user));
+        return UserResponseDTO.fromEntityList(users);
     }
 
 }

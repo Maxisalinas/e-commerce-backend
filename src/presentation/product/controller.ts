@@ -16,7 +16,7 @@ export class ProductController {
         private readonly getManyProductsUseCase: GetManyProductsUseCase,
         private readonly createProductUseCase: CreateProductUseCase,
         private readonly updateProductUseCase: UpdateProductUseCase,
-        private readonly deleteProductUseCase: DeleteProductUseCase
+        private readonly deleteProductUseCase: DeleteProductUseCase,
     ){}
     
     public getById = async ( req: Request, res: Response ) => {

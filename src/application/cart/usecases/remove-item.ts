@@ -10,8 +10,11 @@ export class RemoveCartItem implements RemoveCartItemUseCase {
     ) {}
 
     public async execute( id: string ): Promise<CartResponseDTO> {
+
         await this.cartRepository.getItemById(id);
         const updatedCart = await this.cartRepository.removeItem(id);
         return new CartResponseDTO(updatedCart);
+
     }
+    
 }

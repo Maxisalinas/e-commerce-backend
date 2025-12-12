@@ -17,7 +17,7 @@ export class UpdateUser implements UpdateUserUseCase {
             ...updateUserDTO,
         });
         const updatedUser = await this.userRepository.update(userEntity);
-        return new UserResponseDTO(updatedUser); 
+        return UserResponseDTO.fromEntity(updatedUser); 
     }
 
 }

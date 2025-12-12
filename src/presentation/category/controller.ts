@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';;
+import { Request, Response } from 'express';
 import type { GetCategoryByIdUseCase } from '../../application/category/interfaces/get-by-id-use-case.js';
 import type { GetManyCategoriesUseCase } from '../../application/category/interfaces/getmany-use-case.js';
 import type { CreateCategoryUseCase } from '../../application/category/interfaces/create-use-case.js';
@@ -17,7 +17,7 @@ export class CategoryController {
         private readonly getManyCategoriesUseCase: GetManyCategoriesUseCase,
         private readonly createCategoryUseCase: CreateCategoryUseCase,
         private readonly updateCategoryUseCase: UpdateCategoryUseCase,
-        private readonly deleteCategoryUseCase: DeleteCategoryUseCase
+        private readonly deleteCategoryUseCase: DeleteCategoryUseCase,
     ){}
 
     public getById = async ( req: Request, res: Response ) => {

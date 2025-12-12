@@ -17,7 +17,7 @@ export class UserController {
         private readonly getManyUsersUseCase: GetManyUsersUseCase,
         private readonly registerUserUseCase: RegisterUserUseCase,
         private readonly updateUserUseCase: UpdateUserUseCase,
-        private readonly deleteUserUseCase: DeleteUserUseCase
+        private readonly deleteUserUseCase: DeleteUserUseCase,
     ){}
     
     public getById = async ( req: Request, res: Response ) => {

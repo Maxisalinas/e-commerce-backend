@@ -11,8 +11,8 @@ export class Server {
 
     public readonly app = express();
     private readonly port: number;
-    private serverListener?: any;
     private readonly routes: Router;
+    private serverListener?: any;
 
     constructor( options: Options ) {
         const { port, routes } = options;
@@ -34,7 +34,7 @@ export class Server {
     }
 
     public close() {
-      this.serverListener?.close();
+        this.serverListener?.close();
     }
 
 }

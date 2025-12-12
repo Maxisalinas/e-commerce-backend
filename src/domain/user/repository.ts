@@ -9,5 +9,5 @@ export abstract class UserRepository {
     abstract register( user: UserEntity ): Promise<UserEntity>;
     abstract update( user: UserEntity ): Promise<UserEntity>;
     abstract delete( id: string ): Promise<void>;
-    
+
 }
