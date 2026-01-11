@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AuthenticationError } from "../../application/errors/authenticationError.js";
+import { AuthenticationError } from '../../application/auth/errors/authenticationError.js';
 import { JWTGenerator } from '../../application/auth/interfaces/jwt-generator.js';
 
 export function validateRefreshToken(jwt: JWTGenerator, secret: string) {
@@ -15,7 +15,6 @@ export function validateRefreshToken(jwt: JWTGenerator, secret: string) {
         (req as any).payload = payload;
 
         next();
-
     }
 
 }

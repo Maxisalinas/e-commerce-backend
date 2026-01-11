@@ -1,8 +1,8 @@
-import { ProductRepository } from "../../../domain/product/repository.js";
+import type { GetManyProductsUseCase } from "../interfaces/getmany-use-case.js";
+import type { ProductRepository } from "../../../domain/product/repository.js";
 import { GetManyProductsDTO } from "../../../presentation/product/dtos/input/getmany.js";
 import { ProductResponseDTO } from "../../../presentation/product/dtos/output/response.js";
 import type { ProductFilter } from "../interfaces/filter.js";
-import type { GetManyProductsUseCase } from "../interfaces/getmany-use-case.js";
 
 
 export class GetManyProducts implements GetManyProductsUseCase {
@@ -22,8 +22,8 @@ export class GetManyProducts implements GetManyProductsUseCase {
             maxPrice: getManyProductsDTO.maxPrice
         }
         const products = await this.productRepository.getMany(productFilter);
-        return ProductResponseDTO.fromEntityList(products);
         
+        return ProductResponseDTO.fromEntityList(products);
     }
 
 }

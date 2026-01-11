@@ -7,46 +7,30 @@ export enum Role {
 
 export class UserEntity {
     constructor(
-        public readonly id: string | undefined,
+        public readonly id: string | null,
         public readonly name: string,
         public readonly email: string,
         public readonly password: string,
-        public readonly role: Role = Role.USER,
+        public readonly role: Role,
         public readonly cart: CartEntity | null,
         public readonly createdAt?: Date,
         public readonly updatedAt?: Date,
     ) {}
     
-    public static create(params: { name: string, email: string, password: string }): UserEntity {
-        
+    public static create(params: {
+        id: string | null;
+        name: string;
+        email: string;
+        password: string;
+    }): UserEntity {
         return new UserEntity(
-            undefined,
+            null,
             params.name,
             params.email,
             params.password,
             Role.USER,
             null,
         );
-    }
-
-    public static fromObject(object: any): UserEntity {
-
-        const { id, name, email, password, role, createdAt, updatedAt, cart } = object;
-        
-        return new UserEntity(
-            id,
-            name, 
-            email,
-            password, 
-            role, 
-            CartEntity.fromObject(cart),
-            createdAt, 
-            updatedAt
-        );
-    }
-
-    public static fromObjectList(objects: any[]): UserEntity[] {
-        return objects.map(obj => UserEntity.fromObject(obj));
     }
 
 }

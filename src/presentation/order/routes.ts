@@ -37,9 +37,7 @@ export class OrderRoutes {
             asyncHandler(orderController.changeStatus)
         );
 
-
         return router;
-
     }
 
 }

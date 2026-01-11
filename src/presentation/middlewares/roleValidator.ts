@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { AuthorizationError } from '../../application/errors/authorizationError.js';
+import { AuthorizationError } from '../../application/auth/errors/authorizationError.js';
 
 export function authorizeRole( ...allowedRoles: string[] ) {
+
     return (req: Request, res: Response, next: NextFunction) => {
         const payload = (req as any).payload;
 
@@ -15,4 +16,5 @@ export function authorizeRole( ...allowedRoles: string[] ) {
 
         next();
     }
+    
 }

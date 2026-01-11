@@ -2,11 +2,20 @@ import { CategoryEntity } from "../../../../domain/category/entity.js";
 
 export class CategoryResponseDTO {
 
-    public readonly id: number;
-    public readonly name: string;
+    constructor(
+        public readonly id: number,
+        public readonly name: string
+    ){}
 
-    constructor(category: CategoryEntity) {
-        this.id = category.id;
-        this.name = category.name;
+    static fromEntity(category: CategoryEntity): CategoryResponseDTO {
+        return new CategoryResponseDTO(
+            category.id!,
+            category.name,
+        );
     }
+
+    static fromEntityList(categories: CategoryEntity[]): CategoryResponseDTO[] {
+        return categories.map(category => CategoryResponseDTO.fromEntity(category)); 
+    }
+
 }

@@ -2,5 +2,5 @@ import { UpdateCategoryDTO } from "../../../presentation/category/dtos/input/upd
 import { CategoryResponseDTO } from "../../../presentation/category/dtos/output/response.js";
 
 export interface UpdateCategoryUseCase {
-    execute( id: number, updateCategoryDTO: UpdateCategoryDTO ): Promise<CategoryResponseDTO>,
+    execute(id: number, updateCategoryDTO: UpdateCategoryDTO): Promise<CategoryResponseDTO>,
 }

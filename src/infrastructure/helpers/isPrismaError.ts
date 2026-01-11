@@ -1,4 +1,8 @@
-import { PrismaClientInitializationError, PrismaClientKnownRequestError, PrismaClientUnknownRequestError, PrismaClientValidationError } from "./prismaErrorsHandler.js";
+import { PrismaClientInitializationError, 
+    PrismaClientKnownRequestError, 
+    PrismaClientUnknownRequestError,
+     PrismaClientValidationError 
+} from "./prismaErrorsHandler.js";
 
 export function isPrismaError(error: unknown): boolean {
     return (

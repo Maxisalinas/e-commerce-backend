@@ -8,6 +8,7 @@ export class CreateProductDTO {
     public readonly price!: number;
     public readonly stock!: number;
     public readonly imageUrl!: string;
+    public readonly weight!: number;
 
     constructor(input: CreateProductDTOProps) {
         Object.assign(this, input);

@@ -1,4 +1,5 @@
 export class AuthorizationError extends Error {
+
     code?: string;
     details?: any;
 
@@ -8,4 +9,5 @@ export class AuthorizationError extends Error {
         this.code = code;    
         this.details = details;  
     }
+    
 }

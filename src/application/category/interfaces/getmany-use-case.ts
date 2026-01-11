@@ -2,5 +2,5 @@ import { GetManyCategoriesDTO } from "../../../presentation/category/dtos/input/
 import { CategoryResponseDTO } from "../../../presentation/category/dtos/output/response.js";
 
 export interface GetManyCategoriesUseCase {
-    execute( getManyCategoriesDTO: GetManyCategoriesDTO ): Promise<CategoryResponseDTO[]>,
+    execute(getManyCategoriesDTO: GetManyCategoriesDTO): Promise<CategoryResponseDTO[]>,
 }

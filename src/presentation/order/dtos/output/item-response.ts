@@ -14,9 +14,9 @@ export class OrderItemResponseDTO {
         return new OrderItemResponseDTO(
             item.productId,
             item.name,
-            item.price.toNumber(),
+            item.price,
             item.quantity,
-            item.subtotal.toNumber()
+            item.subtotal
         );
     }
 

@@ -23,18 +23,21 @@ export class CategoryController {
     public getById = async ( req: Request, res: Response ) => {
         const id: number = (req as any).paramsParsed.id;
         const response: CategoryResponseDTO = await this.getCategoryByIdUseCase.execute(id);
+        
         return res.status(200).json(response);
     }
 
     public getMany = async ( req: Request, res: Response ) => {
         const getManyCategoriesDTO = new GetManyCategoriesDTO((req as any).queryParsed);
         const response: CategoryResponseDTO[] = await this.getManyCategoriesUseCase.execute(getManyCategoriesDTO);
+        
         return res.status(200).json(response);
     }
 
     public create = async ( req: Request, res: Response ) => {
         const createCategoryDTO = new CreateCategoryDTO((req as any).bodyParsed);
         const response: CategoryResponseDTO = await this.createCategoryUseCase.execute(createCategoryDTO);
+        
         return res.status(201).json(response);
     }
     
@@ -42,6 +45,7 @@ export class CategoryController {
         const id: number = (req as any).paramsParsed.id;
         const updateCategoryDTO = new UpdateCategoryDTO((req as any).bodyParsed);
         const response: CategoryResponseDTO = await this.updateCategoryUseCase.execute(id, updateCategoryDTO);
+        
         return res.status(200).json(response);
     }
 
@@ -49,6 +53,7 @@ export class CategoryController {
         const id: number = (req as any).paramsParsed.id;
         await this.deleteCategoryUseCase.execute(id);
         const response = { message: 'Categoría eliminada correctamente.' }
+        
         return res.status(200).json(response);
     }
 

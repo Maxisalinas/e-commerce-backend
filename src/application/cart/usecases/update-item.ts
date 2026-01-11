@@ -1,9 +1,8 @@
-import { CartEntity } from "../../../domain/cart/entity.js";
-import { CartRepository } from "../../../domain/cart/repository.js";
+import type { UpdateCartItemUseCase } from "../interfaces/update-item-use-case.js";
+import type { CartRepository } from "../../../domain/cart/repository.js";
 import { CartItemEntity } from "../../../domain/cartItem/entity.js";
 import { UpdateCartItemDTO } from "../../../presentation/cart/dtos/input/update-item.js";
 import { CartResponseDTO } from "../../../presentation/cart/dtos/output/response.js";
-import { UpdateCartItemUseCase } from "../interfaces/update-item-use-case.js";
 
 
 export class UpdateCartItem implements UpdateCartItemUseCase {
@@ -12,13 +11,20 @@ export class UpdateCartItem implements UpdateCartItemUseCase {
         private readonly cartRepository: CartRepository,
     ) {}
 
-    public async execute( id: string, updateCartItemDTO: UpdateCartItemDTO ): Promise<CartResponseDTO> {
+    public async execute(id: string, updateCartItemDTO: UpdateCartItemDTO): Promise<CartResponseDTO> {
 
-        await this.cartRepository.getItemById(id);
-        const itemEntity = CartItemEntity.fromObject({ id, ...updateCartItemDTO });
-        const updatedCart = await this.cartRepository.updateItem(itemEntity);
-        return new CartResponseDTO(updatedCart);
+        const item = await this.cartRepository.getItemById(id);
+        const updatedItem = new CartItemEntity(
+            item.id,
+            item.cartId, // Si no se pasa, se mantiene el valor anterior
+            item.productId,
+            updateCartItemDTO.quantity,
+            item.product,
+        );
+        
+        const updatedCart = await this.cartRepository.updateItem(updatedItem);
 
+        return CartResponseDTO.fromEntity(updatedCart);
     }
     
 }

@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { JWTPayload } from '../../application/auth/interfaces/payload.js';
-import { AuthenticationError } from '../../application/errors/authenticationError.js';
+import { AuthenticationError } from '../../application/auth/errors/authenticationError.js';
 
 export const JsonWebToken = {
     

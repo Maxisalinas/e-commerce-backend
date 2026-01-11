@@ -10,18 +10,20 @@ export class ProductResponseDTO {
         public readonly price: number,
         public readonly stock: number,
         public readonly imageUrl: string,
+        public readonly weight: number,
     ) {}
 
 
     static fromEntity(product: ProductEntity): ProductResponseDTO {
         return new ProductResponseDTO(
-            product.id,
+            product.id!,
             product.categoryId,
             product.name,
             product.description,
-            product.price.toNumber(),
+            product.price,
             product.stock,
-            product.imageUrl
+            product.imageUrl,
+            product.weight
         );
     }
 

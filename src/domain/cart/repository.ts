@@ -9,6 +9,7 @@ export abstract class CartRepository {
     
     // ITEMS
     abstract getItemById(id: string): Promise<CartItemEntity>; 
+    abstract getItemByProductId(cartId: string, productId: number): Promise<CartItemEntity | null>
     abstract addItem(item: CartItemEntity): Promise<CartEntity>;
     abstract updateItem(item: CartItemEntity): Promise<CartEntity>; 
     abstract removeItem(id: string): Promise<CartEntity>; 

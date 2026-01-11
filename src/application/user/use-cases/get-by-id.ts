@@ -1,6 +1,6 @@
-import { UserRepository } from "../../../domain/user/repository.js";
-import { UserResponseDTO } from "../../../presentation/user/dtos/output/response.js";
 import type { GetUserByIdUseCase } from "../interfaces/get-by-id-use-case.js";
+import type { UserRepository } from "../../../domain/user/repository.js";
+import { UserResponseDTO } from "../../../presentation/user/dtos/output/response.js";
 
 export class GetUserById implements GetUserByIdUseCase {
 
@@ -11,6 +11,7 @@ export class GetUserById implements GetUserByIdUseCase {
     public async execute( id: string ): Promise<UserResponseDTO> {
 
         const user = await this.userRepository.getById(id);
+        
         return UserResponseDTO.fromEntity(user);
     }
 

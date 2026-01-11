@@ -52,9 +52,7 @@ export class CategoriesRoutes {
     );
 
     return router;
-
   }
-
 
 }
 

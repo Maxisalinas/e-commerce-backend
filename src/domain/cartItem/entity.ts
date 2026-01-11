@@ -1,29 +1,31 @@
 import { ProductEntity } from "../product/entity.js";
 
 export class CartItemEntity {
+    
     constructor(
-        public readonly id: string,
+        public readonly id: string | null,
         public readonly cartId: string,
         public readonly productId: number,
         public readonly quantity: number,
         public readonly product: ProductEntity,
         public readonly createdAt?: Date,
         public readonly updatedAt?: Date,
-    ) {}
+    ) { }
 
-    public static fromObject(object: any): CartItemEntity {
+    public static create(params: {
+        id: string | null;
+        cartId: string;
+        productId: number;
+        quantity: number;
+        product: ProductEntity;
+    }): CartItemEntity {
         return new CartItemEntity(
-            object.id,
-            object.cartId,
-            object.productId,
-            object.quantity,
-            ProductEntity.fromObject(object.product),
-            object.createdAt,
-            object.updatedAt
+            params.id ? params.id : null,
+            params.cartId,
+            params.productId,
+            params.quantity,
+            params.product,
         );
     }
 
-    public static fromObjectList(objects: any[]): CartItemEntity[] {
-        return objects.map(obj => CartItemEntity.fromObject(obj));
-    }
 }

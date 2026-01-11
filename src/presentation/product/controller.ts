@@ -22,18 +22,21 @@ export class ProductController {
     public getById = async ( req: Request, res: Response ) => {
         const id: number = (req as any).paramsParsed.id;
         const response: ProductResponseDTO = await this.getProductByIdUseCase.execute(id);
+        
         return res.status(200).json(response);
     }
 
     public getMany = async ( req: Request, res: Response ) => {
         const getManyProductsDTO = new GetManyProductsDTO((req as any).queryParsed);
         const response: ProductResponseDTO[] = await this.getManyProductsUseCase.execute(getManyProductsDTO);
+        
         return res.status(200).json(response);
     }
 
     public create = async ( req: Request, res: Response ) => {
         const createProductDTO = new CreateProductDTO((req as any).bodyParsed);
         const response: ProductResponseDTO = await this.createProductUseCase.execute(createProductDTO);
+        
         return res.status(201).json(response);
     }
 
@@ -41,6 +44,7 @@ export class ProductController {
         const id: number = (req as any).paramsParsed.id;
         const updatedProductDTO = new UpdateProductDTO((req as any).bodyParsed);
         const response: ProductResponseDTO = await this.updateProductUseCase.execute(id, updatedProductDTO);
+        
         return res.status(200).json(response);
     }
     
@@ -48,6 +52,7 @@ export class ProductController {
         const id: number = (req as any).paramsParsed.id;
         await this.deleteProductUseCase.execute(id);
         const response = { message: 'Producto eliminado correctamente.' }
+        
         return res.status(200).json(response);
     }
     

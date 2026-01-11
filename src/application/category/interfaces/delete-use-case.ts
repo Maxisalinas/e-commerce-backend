@@ -1,4 +1,4 @@
 export interface DeleteCategoryUseCase {
-    execute( id: number ): Promise<void>,
+    execute(id: number): Promise<void>,
 }
 

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { AuthenticationError } from '../../application/errors/authenticationError.js';
 import type { JWTGenerator } from '../../application/auth/interfaces/jwt-generator.js';
+import { AuthenticationError } from '../../application/auth/errors/authenticationError.js';
+
 
 export function validateAccessToken(jwt: JWTGenerator, secret: string) {
 
@@ -8,8 +9,7 @@ export function validateAccessToken(jwt: JWTGenerator, secret: string) {
 
         const authHeader = req.headers['authorization'];
         
-        if (authHeader && !authHeader.startsWith('Bearer ')) 
-            throw new AuthenticationError('El encabezado Authorization debe tener el formato "Bearer <token>".', 'INVALID_HEADER_FORMAT');
+        if (authHeader && !authHeader.startsWith('Bearer ')) throw new AuthenticationError('El encabezado Authorization debe tener el formato "Bearer <token>".', 'INVALID_HEADER_FORMAT');
        
         const tokenFromHeader = authHeader?.split(' ')[1]; 
         const tokenFromCookie = req.cookies?.refresh_token;
@@ -23,8 +23,7 @@ export function validateAccessToken(jwt: JWTGenerator, secret: string) {
                 return next(); 
         }
 
-        if (tokenFromCookie) 
-            throw new AuthenticationError('El access_token ha expirado. Usa el refresh_token para obtener uno nuevo.', 'TOKEN_EXPIRED');
+        if (tokenFromCookie) throw new AuthenticationError('El access_token ha expirado. Usa el refresh_token para obtener uno nuevo.', 'TOKEN_EXPIRED');
         
     }
     

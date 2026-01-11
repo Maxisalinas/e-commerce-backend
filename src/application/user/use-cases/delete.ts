@@ -1,8 +1,6 @@
-import { UserRepository } from "../../../domain/user/repository.js";
+import type { DeleteUserUseCase } from "../interfaces/delete-use-case.js";
+import type { UserRepository } from "../../../domain/user/repository.js";
 
-export interface DeleteUserUseCase {
-    execute( id: string ): Promise<void>,
-}
 
 export class DeleteUser implements DeleteUserUseCase {
 
@@ -10,12 +8,12 @@ export class DeleteUser implements DeleteUserUseCase {
         private readonly userRepository: UserRepository,
     ) {}
 
-    public async execute( id: string ): Promise<void> {
+    public async execute(id: string): Promise<void> {
 
         await this.userRepository.getById(id)
         await this.userRepository.delete(id);
-        return;
         
+        return;  
     }
 
 }

@@ -1,87 +1,46 @@
 
 import { prisma } from "../database/postgres/prisma-client.js";
+import type { OrderRepository } from "../../domain/order/repository.js";
+import { OrderMapper } from "./mapper.js";
 import { OrderStatus, PaymentStatus } from "@prisma/client";
 import { OrderEntity } from "../../domain/order/entity.js";
-import { OrderRepository } from "../../domain/order/repository.js";
 import { NotFoundError } from "../../application/errors/notFoundError.js";
 
 export class OrderRepositoryImpl implements OrderRepository {
 
     public async create(order: OrderEntity): Promise<OrderEntity> {
 
+        const data = OrderMapper.toPersistence(order);
+
         const newOrder = await prisma.order.create({
-            data: {
-                userId: order.userId,
-                status: order.status as OrderStatus,
-                paymentStatus: order.paymentStatus as PaymentStatus,
-                totalAmount: order.totalAmount,
-                shippingName: order.shippingAddress.name,
-                shippingStreet: order.shippingAddress.street,
-                shippingCity: order.shippingAddress.city,
-                shippingState: order.shippingAddress.state,
-                shippingZip: order.shippingAddress.zip,
-                shippingCountry: order.shippingAddress.country,
-                shippingPhone: order.shippingAddress.phone,
-                billingName: order.billingAddress.name,
-                billingStreet: order.billingAddress.street,
-                billingCity: order.billingAddress.city,
-                billingState: order.billingAddress.state,
-                billingZip: order.billingAddress.zip,
-                billingCountry: order.billingAddress.country,
-                shippingCost: order.shippingCost,
-                discount: order.discount,
-                notes: order.notes,
-                items: {
-                    create: order.items.map(item => ({
-                        productId: item.productId,
-                        quantity: item.quantity,
-                        name: item.name,
-                        price: item.price,
-                        subtotal: item.subtotal
-                    }))
-                }
-            },
-            include: {
-                items: true
-            }
+            data,
+            include: { items: true }
         });
 
-        return OrderEntity.fromObject(newOrder);
+        return OrderMapper.toDomain(newOrder);
     }
 
-    public async getById( orderId: string): Promise<OrderEntity> {
+    public async getById(id: string): Promise<OrderEntity> {
 
         const order = await prisma.order.findUnique({
-            where: {
-                id: orderId
-            },
-            include: {
-                items: true,
-            }
+            where: { id },
+            include: { items: true }
         })
-
         if (!order) throw new NotFoundError('No se encontró un pedido con el ID proporcionado.');
 
-        return OrderEntity.fromObject(order);
+        return OrderMapper.toDomain(order);
     }
 
-    public async getByUserId(userId: string): Promise<OrderEntity[]> {
+    public async getByUserId(id: string): Promise<OrderEntity[]> {
 
         const orders = await prisma.order.findMany({
-            where: {
-                userId: userId,
-            },
-            orderBy: {
-                createdAt: 'desc',
-            },
-            include: {
-                items: true,
-            }
+            where: { id },
+            orderBy: { createdAt: 'desc' },
+            include: { items: true }
         });
-
         if (!orders) throw new NotFoundError('No se encontraron pedidos relacionados a este usuario.');
         
-        return OrderEntity.fromObjectList(orders);
+        return OrderMapper.toDomainFromList(orders);
     }
 
     public async getAll(): Promise<OrderEntity[]> {
@@ -91,7 +50,7 @@ export class OrderRepositoryImpl implements OrderRepository {
             include: { items: true }
         });
         
-        return OrderEntity.fromObjectList(orders);
+        return OrderMapper.toDomainFromList(orders);
 
     }
 
@@ -106,7 +65,7 @@ export class OrderRepositoryImpl implements OrderRepository {
             include: { items: true }
         });
 
-        return OrderEntity.fromObject(updatedOrder);
+        return OrderMapper.toDomain(updatedOrder);
     }
 
 }

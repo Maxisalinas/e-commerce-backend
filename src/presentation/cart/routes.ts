@@ -52,7 +52,6 @@ export class CartRoutes {
         );
 
         return router;
-
     }
 
 }

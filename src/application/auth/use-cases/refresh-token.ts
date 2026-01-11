@@ -1,7 +1,7 @@
 import { envs } from "../../../config/envs.js";
+import type { RefreshTokenUseCase } from "../interfaces/refresh-token-use-case.js";
 import type { JWTGenerator } from "../interfaces/jwt-generator.js";
 import type { JWTPayload } from "../interfaces/payload.js";
-import type { RefreshTokenUseCase } from "../interfaces/refresh-token-use-case.js";
 
 export class RefreshToken implements RefreshTokenUseCase {
 
@@ -18,7 +18,6 @@ export class RefreshToken implements RefreshTokenUseCase {
         )
         
         return accessToken;
-        
     }
 
 }

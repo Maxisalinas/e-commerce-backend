@@ -3,9 +3,9 @@ export interface ShippingAddress {
     street: string;
     city: string;
     state: string;
-    zip: string;
+    postalCode: string;
     country: string;
-    phone?: string;
+    phone: string;
 }
 
 export interface BillingAddress {
@@ -13,6 +13,6 @@ export interface BillingAddress {
     street: string;
     city: string;
     state: string;      
-    zip: string;    // código postal.
+    postalCode: string;
     country: string;
 }

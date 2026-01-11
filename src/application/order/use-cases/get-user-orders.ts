@@ -14,7 +14,6 @@ export class GetUserOrders implements GetUserOrdersUseCase {
         const orders = await this.orderRepository.getByUserId(userId);
         
         return OrderResponseDTO.fromEntityList(orders);
-        
     }
 
 }

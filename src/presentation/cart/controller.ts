@@ -23,18 +23,21 @@ export class CartController {
     public getById = async ( req: Request, res: Response ) => {
         const cartId: string = (req as any).paramsParsed.id;
         const cart: CartResponseDTO = await this.getCartByIdUseCase.execute(cartId);
+        
         return res.status(200).json(cart);
     }
 
     public getByUserId = async ( req: Request, res: Response ) => {
         const userId: string = (req as any).payload.id;
         const cart: CartResponseDTO = await this.getCartByUserIdUseCase.execute(userId);
+       
         return res.status(200).json(cart);
     }
 
     public clear = async ( req: Request, res: Response ) => {
         const cartId: string = (req as any).paramsParsed.id;
         const cart: CartResponseDTO = await this.clearCartUsecase.execute(cartId);
+        
         return res.status(200).json(cart);
     }
 
@@ -42,6 +45,7 @@ export class CartController {
         const userId: string = (req as any).payload.id;
         const addCartItemDTO = new AddCartItemDTO((req as any).bodyParsed);
         const cart: CartResponseDTO = await this.addCartItemUseCase.execute(userId, addCartItemDTO);
+        
         return res.status(201).json(cart);
     }
   
@@ -49,12 +53,14 @@ export class CartController {
         const itemId: string = (req as any).paramsParsed.id;
         const updateCartItemDTO = new UpdateCartItemDTO((req as any).bodyParsed);
         const cart: CartResponseDTO = await this.updateCartItemUseCase.execute(itemId, updateCartItemDTO);
+        
         return res.status(200).json(cart);
     }
     
     public removeItem = async ( req: Request, res: Response ) => {
         const itemId: string = ((req as any).paramsParsed.id);
         const cart: CartResponseDTO = await this.removeCartItemUseCase.execute(itemId);
+        
         return res.status(200).json(cart);
     }
 

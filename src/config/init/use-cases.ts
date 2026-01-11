@@ -35,14 +35,32 @@ import { Checkout } from "../../application/order/use-cases/checkout.js";
 import { GetUserOrders } from "../../application/order/use-cases/get-user-orders.js";
 import { GetAllOrders } from "../../application/order/use-cases/get-all-orders.js";
 import { ChangeOrderStatus } from "../../application/order/use-cases/change-status.js";
+// Shipping
+import { CalculateShippingCost } from "../../application/shipping/use-cases/calculate-cost.js";
+import { ShippingCostCalculator } from "../../domain/shipping/cost-calculator.js";
+import { ExpressShippingCostCalculator } from "../../application/shipping/calculators/express-cost-calculator.js";
+import { StandardShippingCalculator } from "../../application/shipping/calculators/standard-cost-calculator.js";
+// Shipping Method
+import { AddShippingMethod } from "../../application/shippingMethod/use-cases/add-method.js";
+import { DeleteShippingMethod } from "../../application/shippingMethod/use-cases/delete-method.js";
+import { GetActiveShippingMethods } from "../../application/shippingMethod/use-cases/get-active-methods.js";
+import { GetShippingMethodById } from "../../application/shippingMethod/use-cases/get-method-by-id.js";
+import { UpdateShippingMethod } from "../../application/shippingMethod/use-cases/update-method.js";
 
 
 
 export function initUseCases(repositories: Repositories): UseCases {
 
-    const { productRepository, categoryRepository, userRepository, cartRepository, orderRepository } = repositories;
+    const { productRepository, categoryRepository, userRepository, cartRepository, orderRepository, shippingMethodRepository } = repositories;
     
     const passwordHasher = new BcryptHasher();
+
+    const calculators = new Map<string, ShippingCostCalculator>();
+    calculators.set('EXPRESS', new ExpressShippingCostCalculator());
+    calculators.set('STANDARD', new StandardShippingCalculator());
+
+    const calculateShippingCostUseCase = new CalculateShippingCost(shippingMethodRepository, calculators);
+    
 
     return {
         // Product
@@ -64,7 +82,7 @@ export function initUseCases(repositories: Repositories): UseCases {
         updateUserUseCase: new UpdateUser(userRepository),
         deleteUserUseCase: new DeleteUser(userRepository),
         // auth
-        loginUserUseCase: new LoginUser(userRepository, cartRepository, passwordHasher, JsonWebToken,),
+        loginUserUseCase: new LoginUser(userRepository, cartRepository, passwordHasher, JsonWebToken),
         refreshTokenUseCase: new RefreshToken(JsonWebToken),
         // Cart
         getCartByIdUseCase: new GetCartById(cartRepository),
@@ -74,10 +92,18 @@ export function initUseCases(repositories: Repositories): UseCases {
         updateCartItemUseCase: new UpdateCartItem(cartRepository),
         removeCartItemUseCase: new RemoveCartItem(cartRepository),
         // Order
-        checkoutUseCase: new Checkout(orderRepository, cartRepository),
+        checkoutUseCase: new Checkout(orderRepository, cartRepository, calculateShippingCostUseCase),
         getUserOrdersUseCase: new GetUserOrders(orderRepository),
         getAllOrdersUseCase: new GetAllOrders(orderRepository),
-        changeOrderStatusUseCase: new ChangeOrderStatus(orderRepository)
+        changeOrderStatusUseCase: new ChangeOrderStatus(orderRepository),
+        // Shipping
+        calculateShippingCostUseCase: calculateShippingCostUseCase,
+        // Shipping Method
+        addShippingMethodUseCase: new AddShippingMethod(shippingMethodRepository),
+        getActiveShippingMethodsUseCase: new GetActiveShippingMethods(shippingMethodRepository),
+        getShippingMethodByIdUseCase: new GetShippingMethodById(shippingMethodRepository),
+        updateShippingMethodUseCase: new UpdateShippingMethod(shippingMethodRepository),
+        deleteShippingMethodUseCase: new DeleteShippingMethod(shippingMethodRepository),
     }
 
 }

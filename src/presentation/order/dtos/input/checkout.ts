@@ -2,14 +2,16 @@ import { CheckoutDTOProps } from './checkout-schema.js';
 
 export class CheckoutDTO {
 
+    public readonly shippingMethodId!: string;
+
     public readonly shippingAddress!: {
         name: string;
         street: string;
         city: string;
         state: string;
-        zip: string;
+        postalCode: string;
         country: string;
-        phone?: string;
+        phone: string;
     };
 
     public readonly billingAddress!: {
@@ -17,7 +19,7 @@ export class CheckoutDTO {
         street: string;
         city: string;
         state: string;
-        zip: string;
+        postalCode: string;
         country: string;
     };
 

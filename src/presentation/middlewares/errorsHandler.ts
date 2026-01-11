@@ -14,5 +14,6 @@ export const errorsHandler = (err: unknown, _req: Request, res: Response<ErrorRe
 
     const handledError = errorHandler(error);
     res.status(handledError.status).json(handledError);
+    
 }
 

@@ -7,6 +7,7 @@ export const UpdateProductSchema = z.object({
     description: z.string().min(20, 'La descripción debe tener al menos 20 caracteres').optional(),
     stock: z.number().int().nonnegative('El stock no puede ser negativo').optional(),
     imageUrl: z.string().url().max(2048, 'La URL de la imagen es demasiado larga').optional(),
+    weight: z.number().min(0, 'El peso no puede ser negativo').optional(),
 });
 
 export type UpdateProductDTOProps = z.infer<typeof UpdateProductSchema>;

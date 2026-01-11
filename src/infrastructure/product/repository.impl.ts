@@ -1,23 +1,23 @@
 import { prisma } from "../database/postgres/prisma-client.js";
-import { ProductRepository } from "../../domain/product/repository.js";
+import type { ProductRepository } from "../../domain/product/repository.js";
+import { ProductMapper } from "./mapper.js";
 import { ProductEntity } from "../../domain/product/entity.js";
 import type { ProductFilter } from "../../application/product/interfaces/filter.js";
 import { NotFoundError } from "../../application/errors/notFoundError.js";
 
 export class ProductRepositoryImpl implements ProductRepository {
     
-    public async getById( id: number ): Promise<ProductEntity> {
+    public async getById(id: number): Promise<ProductEntity> {
 
         const product = await prisma.product.findUnique({
-            where: {
-                id
-            }
+            where: { id },
         });
         if (!product) throw new NotFoundError('No se encontró un producto con el número de ID proporcionado.');
-        return ProductEntity.fromObject(product);
+
+        return ProductMapper.toDomain(product);
     }
 
-    public async getMany( filter: ProductFilter ): Promise<ProductEntity[]> {
+    public async getMany(filter: ProductFilter): Promise<ProductEntity[]> {
 
         const { page, limit, search, categoryId, minPrice, maxPrice } = filter;
 
@@ -39,38 +39,40 @@ export class ProductRepositoryImpl implements ProductRepository {
             skip: (page - 1) * limit,  // Paginación
             take: limit,  // Limita la cantidad de resultados
         });
-
         if (!products) throw new NotFoundError(`No se encontraron productos.`);
-        return ProductEntity.fromObjectList(products);
+
+        return ProductMapper.toDomainFromList(products);
     }
 
+    public async create(product: ProductEntity): Promise<ProductEntity> {
 
-    public async create( product: ProductEntity ): Promise<ProductEntity> {
-        const newProduct = await prisma.product.create({
-            data: product
-        });
-        return ProductEntity.fromObject(newProduct);
+        const data = ProductMapper.toPersistence(product);
+
+        const newProduct = await prisma.product.create({ data });
+
+        return ProductMapper.toDomain(newProduct);
     }
 
     public async update(product: ProductEntity): Promise<ProductEntity> {
+
+        const data = ProductMapper.toPersistence(product);
         
         const updatedProduct = await prisma.product.update({
-            where: {
-                id: product.id
-            },
-            data: {
-                ...product,
-            }
+            where: { id: product.id! },
+            data
         });
-        return ProductEntity.fromObject(updatedProduct);
+        
+        return ProductMapper.toDomain(updatedProduct);
     }
 
     public async delete( id: number ): Promise<void> {
         await prisma.product.delete({
             where: { id }
         });
+
         return;
     }
+    
 }
 
 

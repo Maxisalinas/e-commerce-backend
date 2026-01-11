@@ -15,7 +15,7 @@ import type { RegisterUserUseCase } from "../../application/user/interfaces/regi
 import type { GetUserByIdUseCase } from "../../application/user/interfaces/get-by-id-use-case.js";
 import type { GetManyUsersUseCase } from "../../application/user/interfaces/getmany-use-case.js";
 import type { UpdateUserUseCase } from "../../application/user/interfaces/update-use-case.js";
-import type { DeleteUserUseCase } from "../../application/user/use-cases/delete.js";
+import type { DeleteUserUseCase } from "../../application/user/interfaces/delete-use-case.js";
 // auth
 import type { LoginUserUseCase } from "../../application/auth/interfaces/login-use-case.js";
 import type { RefreshTokenUseCase } from "../../application/auth/interfaces/refresh-token-use-case.js";
@@ -31,6 +31,15 @@ import type { CheckoutUseCase } from "../../application/order/interfaces/checkou
 import type { GetUserOrdersUseCase } from "../../application/order/interfaces/get-user-orders.js";
 import type { GetAllOrdersUseCase } from "../../application/order/interfaces/get-all-orders-use-case.js";
 import type { ChangeOrderStatusUseCase } from "../../application/order/interfaces/change-status-use-case.js";
+// Shipping
+import type { CalculateShippingCostUseCase } from "../../application/shipping/interfaces/calculate-cost-use-case.js";
+// Shipping Method
+import type { AddShippingMethodUseCase } from "../../application/shippingMethod/interfaces/add-method-use-case.js";
+import type { DeleteShippingMethodUseCase } from "../../application/shippingMethod/interfaces/delete-method-use-case.js";
+import type { GetActiveShippingMethodsUseCase } from "../../application/shippingMethod/interfaces/get-active-methods-use-case.js";
+import type { GetShippingMethodByIdUseCase } from "../../application/shippingMethod/interfaces/get-method-by-id-use-case.js";
+import type { UpdateShippingMethodUseCase } from "../../application/shippingMethod/interfaces/update-method-use-case.js";
+
 
 export interface UseCases {
     
@@ -40,21 +49,25 @@ export interface UseCases {
     createProductUseCase: CreateProductUseCase;
     updateProductUseCase: UpdateProductUseCase;
     deleteProductUseCase: DeleteProductUseCase;
+
     // Category
     createCategoryUseCase: CreateCategoryUseCase;
     getManyCategoriesUseCase: GetManyCategoriesUseCase;
     getCategoryByIdUseCase: GetCategoryByIdUseCase;
     updateCategoryUseCase: UpdateCategoryUseCase;
     deleteCategoryUseCase: DeleteCategoryUseCase;
+
     // User
     getUserByIdUseCase: GetUserByIdUseCase;
     getManyUsersUseCase: GetManyUsersUseCase;
     registerUserUseCase: RegisterUserUseCase;
     updateUserUseCase: UpdateUserUseCase;
     deleteUserUseCase: DeleteUserUseCase;
+
     // auth
     loginUserUseCase: LoginUserUseCase;
     refreshTokenUseCase: RefreshTokenUseCase;
+
     // Cart
     getCartByIdUseCase: GetCartByIdUseCase;
     getCartByUserIdUseCase: GetCartByUserIdUseCase;
@@ -62,10 +75,21 @@ export interface UseCases {
     addCartItemUseCase: AddCartItemUseCase;
     updateCartItemUseCase: UpdateCartItemUseCase;
     removeCartItemUseCase: RemoveCartItemUseCase;
+
     // Order
     checkoutUseCase: CheckoutUseCase;
     getUserOrdersUseCase: GetUserOrdersUseCase;
     getAllOrdersUseCase: GetAllOrdersUseCase;
     changeOrderStatusUseCase: ChangeOrderStatusUseCase;
+
+    //Shipping
+    calculateShippingCostUseCase: CalculateShippingCostUseCase;
+
+    // Shipping Method
+    addShippingMethodUseCase: AddShippingMethodUseCase;
+    getShippingMethodByIdUseCase: GetShippingMethodByIdUseCase;
+    getActiveShippingMethodsUseCase: GetActiveShippingMethodsUseCase;
+    updateShippingMethodUseCase: UpdateShippingMethodUseCase;
+    deleteShippingMethodUseCase: DeleteShippingMethodUseCase;
     
 }

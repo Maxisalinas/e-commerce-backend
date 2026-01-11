@@ -1,7 +1,6 @@
-import { ProductEntity } from "../../../domain/product/entity.js";
-import { ProductRepository } from "../../../domain/product/repository.js";
-import { ProductResponseDTO } from "../../../presentation/product/dtos/output/response.js";
 import type { GetProductByIdUseCase } from "../interfaces/get-by-id-use-case.js";
+import type { ProductRepository } from "../../../domain/product/repository.js";
+import { ProductResponseDTO } from "../../../presentation/product/dtos/output/response.js";
 
 export class GetProductById implements GetProductByIdUseCase {
 
@@ -14,7 +13,6 @@ export class GetProductById implements GetProductByIdUseCase {
         const product = await this.productRepository.getById( id );
 
         return ProductResponseDTO.fromEntity(product);
-
     }
 
 }

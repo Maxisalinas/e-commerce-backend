@@ -7,6 +7,7 @@ export const CreateProductSchema = z.object({
     price: z.number().min(0.01, 'El precio mínimo que puede asignar es $0.01'),
     stock: z.number().int().nonnegative('El stock no puede ser negativo'),
     imageUrl: z.string().url().max(2048, 'La URL de la imagen es demasiado larga'),
+    weight: z.number().min(0, 'El peso no puede ser negativo'),
 });
 
 export type CreateProductDTOProps = z.infer<typeof CreateProductSchema>;
