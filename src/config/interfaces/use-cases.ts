@@ -39,6 +39,12 @@ import type { DeleteShippingMethodUseCase } from "../../application/shippingMeth
 import type { GetActiveShippingMethodsUseCase } from "../../application/shippingMethod/interfaces/get-active-methods-use-case.js";
 import type { GetShippingMethodByIdUseCase } from "../../application/shippingMethod/interfaces/get-method-by-id-use-case.js";
 import type { UpdateShippingMethodUseCase } from "../../application/shippingMethod/interfaces/update-method-use-case.js";
+// Payment
+import type { CreatePaymentUseCase } from "../../application/payment/interfaces/create-payment-use-case.js";
+import type { InitiatePaymentUseCase } from "../../application/payment/interfaces/initiate-payment.js";
+import { RefundPaymentUseCase } from "../../application/payment/interfaces/refund-payment-use-case.js";
+import { ConfirmPaymentUseCase } from "../../application/payment/interfaces/confirm-payment-use-case.js";
+import { GetPaymentStatusUseCase } from "../../application/payment/interfaces/get-payment-status-use-case.js";
 
 
 export interface UseCases {
@@ -91,5 +97,12 @@ export interface UseCases {
     getActiveShippingMethodsUseCase: GetActiveShippingMethodsUseCase;
     updateShippingMethodUseCase: UpdateShippingMethodUseCase;
     deleteShippingMethodUseCase: DeleteShippingMethodUseCase;
+
+    // Payment
+    createPaymentUseCase: CreatePaymentUseCase;
+    initiatePaymentUseCase: InitiatePaymentUseCase;
+    getPaymentStatusUseCase: GetPaymentStatusUseCase,
+    confirmPaymentUseCase: ConfirmPaymentUseCase,
+    refundPaymentUseCase: RefundPaymentUseCase;
     
 }

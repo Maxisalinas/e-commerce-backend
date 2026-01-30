@@ -25,7 +25,7 @@ export class OrderRepositoryImpl implements OrderRepository {
         const order = await prisma.order.findUnique({
             where: { id },
             include: { items: true }
-        })
+        });
         if (!order) throw new NotFoundError('No se encontró un pedido con el ID proporcionado.');
 
         return OrderMapper.toDomain(order);

@@ -1,3 +1,4 @@
+import { envs } from "../envs.js";
 import type { Repositories } from "../interfaces/repositories.js";
 import type { UseCases } from "../interfaces/use-cases.js";
 // Product
@@ -46,12 +47,27 @@ import { DeleteShippingMethod } from "../../application/shippingMethod/use-cases
 import { GetActiveShippingMethods } from "../../application/shippingMethod/use-cases/get-active-methods.js";
 import { GetShippingMethodById } from "../../application/shippingMethod/use-cases/get-method-by-id.js";
 import { UpdateShippingMethod } from "../../application/shippingMethod/use-cases/update-method.js";
+// Payment
+import { CreatePayment } from "../../application/payment/use-cases/create-payment.js";
+import { InitiatePayment } from "../../application/payment/use-cases/initiate-payment.js";
+import { MercadoPagoGateway } from "../../infrastructure/payment/gateway/mercadopago.js";
+import { RefundPayment } from "../../application/payment/use-cases/refund-payment.js";
+import { ConfirmPayment } from "../../application/payment/use-cases/confirm-payment.js";
+import { GetPaymentStatus } from "../../application/payment/use-cases/get-payment-status.js";
 
 
 
 export function initUseCases(repositories: Repositories): UseCases {
 
-    const { productRepository, categoryRepository, userRepository, cartRepository, orderRepository, shippingMethodRepository } = repositories;
+    const { 
+        productRepository, 
+        categoryRepository, 
+        userRepository, 
+        cartRepository, 
+        orderRepository, 
+        shippingMethodRepository,
+        paymentRepository
+    } = repositories;
     
     const passwordHasher = new BcryptHasher();
 
@@ -59,31 +75,37 @@ export function initUseCases(repositories: Repositories): UseCases {
     calculators.set('EXPRESS', new ExpressShippingCostCalculator());
     calculators.set('STANDARD', new StandardShippingCalculator());
 
-    const calculateShippingCostUseCase = new CalculateShippingCost(shippingMethodRepository, calculators);
-    
+    const calculateShippingCostUseCase = new CalculateShippingCost(shippingMethodRepository, productRepository, calculators);
 
+    const mercadoPagoGateway = new MercadoPagoGateway(envs.MERCADO_PAGO_ACCESS_TOKEN);
+    
     return {
+
         // Product
         getProductByIdUseCase: new GetProductById(productRepository),
         getManyProductsUseCase: new GetManyProducts(productRepository),
         createProductUseCase: new CreateProduct(productRepository),
         updateProductUseCase: new UpdateProduct(productRepository),
         deleteProductUseCase: new DeleteProduct(productRepository),
+
         // Category
         createCategoryUseCase: new CreateCategory(categoryRepository),
         getManyCategoriesUseCase: new GetManyCategories(categoryRepository),
         getCategoryByIdUseCase: new GetCategoryById(categoryRepository),
         updateCategoryUseCase: new UpdateCategory(categoryRepository),
         deleteCategoryUseCase: new DeleteCategory(categoryRepository),
+
         // Users
         getUserByIdUseCase: new GetUserById(userRepository),
         getManyUsersUseCase: new GetManyUsers(userRepository),
         registerUserUseCase: new RegisterUser(userRepository, passwordHasher),
         updateUserUseCase: new UpdateUser(userRepository),
         deleteUserUseCase: new DeleteUser(userRepository),
+
         // auth
-        loginUserUseCase: new LoginUser(userRepository, cartRepository, passwordHasher, JsonWebToken),
+        loginUserUseCase: new LoginUser(userRepository, cartRepository, productRepository, passwordHasher, JsonWebToken),
         refreshTokenUseCase: new RefreshToken(JsonWebToken),
+
         // Cart
         getCartByIdUseCase: new GetCartById(cartRepository),
         getCartByUserIdUseCase: new GetCartByUserId(cartRepository),
@@ -91,19 +113,30 @@ export function initUseCases(repositories: Repositories): UseCases {
         addCartItemUseCase: new AddCartItem(cartRepository, productRepository),
         updateCartItemUseCase: new UpdateCartItem(cartRepository),
         removeCartItemUseCase: new RemoveCartItem(cartRepository),
+
         // Order
         checkoutUseCase: new Checkout(orderRepository, cartRepository, calculateShippingCostUseCase),
         getUserOrdersUseCase: new GetUserOrders(orderRepository),
         getAllOrdersUseCase: new GetAllOrders(orderRepository),
         changeOrderStatusUseCase: new ChangeOrderStatus(orderRepository),
+
         // Shipping
         calculateShippingCostUseCase: calculateShippingCostUseCase,
+
         // Shipping Method
         addShippingMethodUseCase: new AddShippingMethod(shippingMethodRepository),
         getActiveShippingMethodsUseCase: new GetActiveShippingMethods(shippingMethodRepository),
         getShippingMethodByIdUseCase: new GetShippingMethodById(shippingMethodRepository),
         updateShippingMethodUseCase: new UpdateShippingMethod(shippingMethodRepository),
         deleteShippingMethodUseCase: new DeleteShippingMethod(shippingMethodRepository),
+        
+        // Payment
+        createPaymentUseCase: new CreatePayment(paymentRepository, orderRepository),
+        initiatePaymentUseCase: new InitiatePayment(paymentRepository, mercadoPagoGateway),
+        getPaymentStatusUseCase: new GetPaymentStatus(paymentRepository),
+        confirmPaymentUseCase: new ConfirmPayment(paymentRepository, orderRepository, mercadoPagoGateway),
+        refundPaymentUseCase: new RefundPayment(paymentRepository, mercadoPagoGateway),
+ 
     }
 
 }

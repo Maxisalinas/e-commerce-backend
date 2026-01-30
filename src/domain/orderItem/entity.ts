@@ -1,24 +1,24 @@
+import { Money } from "../shared/value-objects/money.js";
+
 export class OrderItemEntity {
-    
-    public readonly subtotal: number;
+
+    public readonly subtotal: Money;
 
     constructor(
         public readonly id: string | null,
         public readonly orderId: string | null,
         public readonly productId: number,
         public readonly name: string,
-        public readonly price: number,
+        public readonly price: Money,
         public readonly quantity: number,
     ) {
-        this.subtotal = price * quantity;
+        this.subtotal = price.multiply(quantity);
     }
 
     public static create(params: {
-        id: string | null;
-        orderId: string | null;
         productId: number;
         name: string;
-        price: number;
+        price: Money;
         quantity: number;
     }): OrderItemEntity {
         return new OrderItemEntity(
@@ -30,7 +30,4 @@ export class OrderItemEntity {
             params.quantity
         );
     }
-
-
-
 }

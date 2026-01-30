@@ -8,6 +8,7 @@ import { Controllers } from '../config/interfaces/controllers.js';
 import { OrderRoutes } from './order/routes.js';
 import { ShippingRoutes } from './shipping/routes.js';
 import { ShippingMethodRoutes } from './shippingMethod/routes.js';
+import { PaymentRoutes } from './payment/routes.js';
 
 export class AppRoutes {
 
@@ -22,6 +23,7 @@ export class AppRoutes {
         router.use('/orders', OrderRoutes.routes(controllers.orderController));
         router.use('/shippings', ShippingRoutes.routes(controllers.shippingController));
         router.use('/shipping-methods', ShippingMethodRoutes.routes(controllers.shippingMethodController));
+        router.use('/payments', PaymentRoutes.routes(controllers.paymentController));
 
 
         return router;

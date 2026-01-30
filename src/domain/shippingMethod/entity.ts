@@ -1,3 +1,4 @@
+import { Money } from "../shared/value-objects/money.js";
 
 export class ShippingMethodEntity {
 
@@ -5,16 +6,15 @@ export class ShippingMethodEntity {
         public readonly id: string | null,
         public readonly name: string,
         public readonly code: string,
-        public readonly price: number,
+        public readonly price: Money,
         public readonly estimatedDays: number,
         public readonly isActive: boolean
-    ){}
+    ) {}
 
     public static create(params: {
-        id: string | null;
         name: string;
         code: string;
-        price: number;
+        price: Money;
         estimatedDays: number;
         isActive: boolean;
     }): ShippingMethodEntity {
@@ -27,6 +27,4 @@ export class ShippingMethodEntity {
             params.isActive
         );
     }
-
-
 }

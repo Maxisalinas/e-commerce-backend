@@ -1,10 +1,12 @@
-import { OrderStatus, PaymentStatus } from "@prisma/client";
 import { OrderEntity } from "../../domain/order/entity.js";
 import { OrderItemEntity } from "../../domain/orderItem/entity.js";
+import { Money } from "../../domain/shared/value-objects/money.js";
 
 export class OrderMapper {
 
     static toDomain(dbOrder: any): OrderEntity {
+        const currency = dbOrder.currency;
+
         return new OrderEntity(
             dbOrder.id,
             dbOrder.userId,
@@ -12,8 +14,8 @@ export class OrderMapper {
             dbOrder.status,
             dbOrder.paymentStatus,
             OrderItemMapper.toDomainFromList(dbOrder.items),
-            dbOrder.discount,
-            dbOrder.shippingCost,
+            Money.of(dbOrder.discount, currency),
+            Money.of(dbOrder.shippingCost, currency),
             dbOrder.shippingAddress,
             dbOrder.billingAddress,
             dbOrder.notes,
@@ -22,20 +24,21 @@ export class OrderMapper {
         );
     }
 
+
     static toPersistence(order: OrderEntity) {
+        const currency = order.totalAmount.currency;
+
         return {
-            // Relaciones
             userId: order.userId,
             shippingMethodId: order.shippingMethodId,
 
-            // Estados
-            status: order.status as OrderStatus,
-            paymentStatus: order.paymentStatus as PaymentStatus,
+            status: order.status,
+            paymentStatus: order.paymentStatus,
 
-            // Montos
-            totalAmount: order.totalAmount,
-            shippingCost: order.shippingCost,
-            discount: order.discount,
+            totalAmount: order.totalAmount.value,
+            discount: order.discount.value,
+            shippingCost: order.shippingCost.value,
+            currency,
 
             // Shipping
             shippingName: order.shippingAddress.name,
@@ -58,17 +61,18 @@ export class OrderMapper {
             items: {
                 create: order.items.map(item => ({
                     productId: item.productId,
-                    quantity: item.quantity,
                     name: item.name,
-                    price: item.price,
-                    subtotal: item.subtotal
+                    quantity: item.quantity,
+                    price: item.price.value,
+                    subtotal: item.subtotal.value,
+                    currency,
                 }))
             },
 
-            // Otros
             notes: order.notes,
         };
     }
+
 
 
     static toDomainFromList(dbOrders: any[]): OrderEntity[] {
@@ -85,17 +89,16 @@ export class OrderMapper {
 export class OrderItemMapper {
 
     static toDomain(dbOrderItem: any): OrderItemEntity {
-
         return new OrderItemEntity(
             dbOrderItem.id,
             dbOrderItem.orderId,
             dbOrderItem.productId,
             dbOrderItem.name,
-            dbOrderItem.price,
+            Money.of(dbOrderItem.price, dbOrderItem.currency),
             dbOrderItem.quantity,
         );
-
     }
+
 
     static toPersistence(orderItem: OrderItemEntity) {
         return {

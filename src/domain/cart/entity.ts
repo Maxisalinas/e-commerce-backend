@@ -1,14 +1,16 @@
 import { CartItemEntity } from "../cartItem/entity.js";
+import { Money } from "../shared/value-objects/money.js";
+import { CartEmptyError } from "../shared/errors/cartEmptyError.js";
 
 export class CartEntity {
-    
+
     constructor(
         public readonly id: string | null,
         public readonly userId: string,
         public readonly items: CartItemEntity[],
         public readonly createdAt?: Date,
         public readonly updatedAt?: Date,
-    ) {}
+    ) { }
 
     public static create(params: {
         id: string | null;
@@ -24,11 +26,20 @@ export class CartEntity {
         );
     }
 
-    public getTotal(): number {
-        return this.items.reduce((totalPrice: number, item: CartItemEntity) => {
-                return totalPrice + (item.product.price * item.quantity);
-        }, 0); 
+    public getTotal(): Money {
+
+        if (this.items.length === 0) throw new CartEmptyError('No se pudo calcular el total de un carrito sin items.');
+        
+        const currency = this.items[0].product.price.currency;
+
+        return this.items.reduce(
+            (total: Money, item: CartItemEntity) => {
+                return total.add(item.getSubtotal());
+            },
+            Money.of(0, currency)
+        );
     }
+
 
 }
 

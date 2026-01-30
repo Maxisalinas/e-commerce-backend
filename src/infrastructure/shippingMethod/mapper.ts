@@ -1,16 +1,18 @@
 import { ShippingMethodEntity } from "../../domain/shippingMethod/entity.js";
+import { Currency } from "../../domain/shared/value-objects/currency.js";
+import { Money } from "../../domain/shared/value-objects/money.js";
 
 
 export class ShippingMethodMapper {
-    
+
     static toDomain(dbShippingMethod: any): ShippingMethodEntity {
         return new ShippingMethodEntity(
             dbShippingMethod.id,
             dbShippingMethod.name,
             dbShippingMethod.code,
-            dbShippingMethod.price,
+            Money.of(dbShippingMethod.price, dbShippingMethod.currency as Currency),
             dbShippingMethod.estimatedDays,
-            dbShippingMethod.isActive   
+            dbShippingMethod.isActive
         );
     }
 
@@ -18,21 +20,19 @@ export class ShippingMethodMapper {
         return {
             name: shippingMethod.name,
             code: shippingMethod.code,
-            price: shippingMethod.price,
-            estimatedDays: shippingMethod.estimatedDays, 
+            price: shippingMethod.price.value,
+            currency: shippingMethod.price.currency,
+            estimatedDays: shippingMethod.estimatedDays,
             isActive: shippingMethod.isActive
         };
     }
 
-    
-
-    static toDomainFromList(dbShippingMethod: any[]): ShippingMethodEntity[] {
-        return dbShippingMethod.map(method => this.toDomain(method));
+    static toDomainFromList(dbShippingMethods: any[]): ShippingMethodEntity[] {
+        return dbShippingMethods.map(method => this.toDomain(method));
     }
-    
-    static toPersistenceFromList(shippingMethod: ShippingMethodEntity[]) {
-        return shippingMethod.map(method => this.toPersistence(method));
+
+    static toPersistenceFromList(shippingMethods: ShippingMethodEntity[]) {
+        return shippingMethods.map(method => this.toPersistence(method));
     }
 
 }
-

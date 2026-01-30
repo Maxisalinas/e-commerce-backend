@@ -49,7 +49,6 @@ export class LoginUser implements LoginUserUseCase {
             for (const item of temporaryCart) {
                 try {
                     const cartItem = CartItemEntity.create({
-                        id: null,
                         cartId: user.cart!.id!,
                         productId: item.productId,
                         quantity: item.quantity,

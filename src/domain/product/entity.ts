@@ -1,10 +1,12 @@
+import { Money } from "../shared/value-objects/money.js";
+
 export class ProductEntity {
     constructor(
         public readonly id: number | null,
         public readonly categoryId: number,
         public readonly name: string,
         public readonly description: string,
-        public readonly price: number,
+        public readonly price: Money,
         public readonly stock: number,
         public readonly imageUrl: string,
         public readonly weight: number,
@@ -13,16 +15,13 @@ export class ProductEntity {
     ) {}
 
     public static create(params: {
-        id: number | null;
         categoryId: number;
         name: string;
         description: string;
-        price: number;
+        price: Money;
         stock: number;
         imageUrl: string;
         weight: number;
-        createdAt?: Date;
-        updatedAt?: Date;
     }): ProductEntity {
         return new ProductEntity(
             null,

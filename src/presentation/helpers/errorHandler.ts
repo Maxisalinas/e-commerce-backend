@@ -4,8 +4,8 @@ import { DatabaseError } from '../../infrastructure/errors/databaseError.js';
 import { NotFoundError } from '../../application/errors/notFoundError.js';
 import { AuthenticationError } from '../../application/auth/errors/authenticationError.js';
 import { AuthorizationError } from '../../application/auth/errors/authorizationError.js';
-import { InvalidOrderStatusError } from '../../domain/order/errors/invalidOrderStatusError .js';
-import { OrderAlreadyCancelledError } from '../../domain/order/errors/orderAlreadyCancelledError.js';
+import { InvalidOrderStateError } from '../../domain/order/errors/invalidOrderStateError .js';
+import { PaymentProviderError } from '../../application/payment/errors/paymentProviderError.js';
 
 
 export interface ErrorResponse {
@@ -56,7 +56,7 @@ export function errorHandler(error: unknown): ErrorResponse {
         }
     }
 
-        if (error instanceof AuthorizationError) {
+    if (error instanceof AuthorizationError) {
         return {
             status: 403,
             message: error.message,
@@ -65,9 +65,7 @@ export function errorHandler(error: unknown): ErrorResponse {
         }
     }
 
-
-
-    if (error instanceof InvalidOrderStatusError) {
+    if (error instanceof InvalidOrderStateError) {
         return {
             status: 400, 
             message: error.message,
@@ -75,15 +73,13 @@ export function errorHandler(error: unknown): ErrorResponse {
         };
     }
 
-
-    if (error instanceof OrderAlreadyCancelledError) {
+    if (error instanceof PaymentProviderError) {
         return {
-            status: 400, 
-            message: error.message,
-            details: error.details,
+            status: 502,
+            message: 'Error en el proveedor de pagos',
+            details: error.message,
         };
     }
-
 
     if (error instanceof Error) {
         console.error('Error inesperado:', error.message);

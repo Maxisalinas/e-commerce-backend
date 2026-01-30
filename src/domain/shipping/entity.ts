@@ -12,7 +12,6 @@ export class ShippingEntity {
     ) {}
 
     public static create(params: {
-        id: string | null;
         orderId: string;
         shippingMethodId: string;
         status: string;

@@ -1,12 +1,42 @@
 
 import { OrderItemEntity } from "../orderItem/entity.js";
-import { ShippingAddress, BillingAddress } from "./address.types.js";
-import { InvalidOrderStatusError } from "./errors/invalidOrderStatusError .js";
-import { OrderAlreadyCancelledError } from "./errors/orderAlreadyCancelledError.js";
+import { PaymentStatus } from "../payment/entity.js";
+import { Money } from "../shared/value-objects/money.js";
+import { InvalidOrderStateError } from "./errors/invalidOrderStateError .js";
+
+export enum OrderStatus {
+    PENDING = 'PENDING',
+    PAID = 'PAID',
+    PROCESSING = 'PROCESSING',
+    SHIPPED = 'SHIPPED',
+    DELIVERED = 'DELIVERED',
+    CANCELLED = 'CANCELLED'
+}
+
+export interface ShippingAddress {
+    name: string;
+    street: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    country: string;
+    phone: string;
+}
+
+export interface BillingAddress {
+    name: string;
+    street: string;
+    city: string;
+    state: string;      
+    postalCode: string;
+    country: string;
+}
+
+
 
 export class OrderEntity {
 
-    public readonly totalAmount: number;
+    public readonly totalAmount: Money;
 
     constructor(
         // Identidad
@@ -17,15 +47,15 @@ export class OrderEntity {
         public readonly shippingMethodId: string,
 
         // Estados
-        public status: string,
-        public paymentStatus: string,
+        public status: OrderStatus,
+        public paymentStatus: PaymentStatus,
 
         // Items
         public readonly items: OrderItemEntity[],
 
         // Montos
-        public readonly discount: number,
-        public readonly shippingCost: number,
+        public readonly discount: Money,
+        public readonly shippingCost: Money,
 
         // Direcciones
         public readonly shippingAddress: ShippingAddress,
@@ -36,53 +66,101 @@ export class OrderEntity {
         public readonly createdAt?: Date,
         public readonly updatedAt?: Date,
     ) {
-
-        // Calculamos total a partir del subtotal de cada item
-        const itemsTotal = items.reduce(
-            (acc, item) => acc + item.subtotal,
-            0
-        );
-
-        // Asignamos el total luego de agregar el costo de envío y restar los descuentos
-        this.totalAmount =
-            itemsTotal +
-            (shippingCost || 0) -
-            (discount || 0);
+        this.totalAmount = this.calculateTotal();
     }
 
     public static create(params: {
-        id: string | null;
         userId: string;
         shippingMethodId: string;
-        status: string;
-        paymentStatus: string;
         items: OrderItemEntity[];
-        discount: number;
-        shippingCost: number;
+        discount?: Money;
+        shippingCost: Money;
         shippingAddress: ShippingAddress;
         billingAddress: BillingAddress;
         notes?: string;
     }): OrderEntity {
+
+        const currency = params.items[0].subtotal.currency;
+
         return new OrderEntity(
             null,
             params.userId,
             params.shippingMethodId,
-            params.status = 'PENDING',
-            params.paymentStatus = 'PENDING',
+            OrderStatus.PENDING,
+            PaymentStatus.PENDING,
             params.items,
-            params.discount,
+            params.discount ?? Money.of(0, currency),
             params.shippingCost,
             params.shippingAddress,
             params.billingAddress,
-            params.notes,
+            params.notes
         );
     }
 
-    public changeStatus(newStatus: string) {
-        const allowedStatus = ["PENDING", "PAID", "SHIPPED", "CANCELLED"];
-        if (!allowedStatus.includes(newStatus)) throw new InvalidOrderStatusError(`Estado de pedido inválido: ${newStatus}`);
-        if (this.status === "CANCELLED") throw new OrderAlreadyCancelledError('No se puede cambiar el estado de un pedido cancelado.');
-        this.status = newStatus;
+
+    private calculateTotal(): Money {
+
+        if (this.items.length === 0) {
+            throw new Error('Order must have at least one item');
+        }
+
+        const itemsTotal = this.items.reduce(
+            (acc, item) => acc.add(item.subtotal),
+            Money.of(0, this.items[0].subtotal.currency)
+        );
+
+        return itemsTotal
+            .add(this.shippingCost)
+            .subtract(this.discount);
+    }
+    
+    
+    public markAsPaid() {
+        if (this.status !== OrderStatus.PENDING) throw new InvalidOrderStateError(`No se puede pagar una orden ${this.status}`);
+        
+        this.status = OrderStatus.PAID;
+        this.paymentStatus = PaymentStatus.PAID;
+    }
+    
+    public markAsProcessing() {
+        if (this.status !== OrderStatus.PAID) throw new InvalidOrderStateError(`Solo se puede procesar una orden PAID`);
+
+        this.status = OrderStatus.PROCESSING;
     }
 
+    public markAsShipped() {
+        if (this.status !== OrderStatus.PROCESSING) throw new InvalidOrderStateError(`Solo se puede enviar una orden PROCESSING`);
+
+        this.status = OrderStatus.SHIPPED;
+    }
+    
+    public markAsDelivered() {
+        if (this.status !== OrderStatus.SHIPPED) throw new InvalidOrderStateError(`Solo se puede entregar una orden SHIPPED`);
+        
+        this.status = OrderStatus.DELIVERED;
+    }
+
+    public markAsCancelled(reason?: string) {
+        if ([OrderStatus.SHIPPED, OrderStatus.DELIVERED].includes(this.status)) throw new InvalidOrderStateError(`No se puede cancelar una orden ${this.status}`);
+        
+        this.status = OrderStatus.CANCELLED;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
+

@@ -4,9 +4,10 @@ import type { CartRepository } from "../../../domain/cart/repository.js";
 import type { OrderRepository } from "../../../domain/order/repository.js";
 import { OrderEntity } from "../../../domain/order/entity.js";
 import { OrderItemEntity } from "../../../domain/orderItem/entity.js";
+import { Currency, Money } from "../../../domain/shared/value-objects/money.js";
 import { CheckoutDTO } from "../../../presentation/order/dtos/input/checkout.js";
 import { OrderResponseDTO } from "../../../presentation/order/dtos/output/response.js";
-import { CartEmptyError } from "../../../domain/order/errors/cartEmptyError.js";
+import { CartEmptyError } from "../../../domain/shared/errors/cartEmptyError.js";
 
 
 export class Checkout implements CheckoutUseCase {
@@ -35,8 +36,6 @@ export class Checkout implements CheckoutUseCase {
         const discount = 10; // TODO: implementar logica de descuentos
 
         const orderItems = cart.items.map(item => OrderItemEntity.create({
-            id: null,
-            orderId: null,
             productId: item.productId,
             name: item.product.name,
             price: item.product.price,
@@ -44,14 +43,11 @@ export class Checkout implements CheckoutUseCase {
         }));
 
         const order = OrderEntity.create({
-            id: null,
             userId,
-            status: 'PENDING',
-            paymentStatus: 'UNPAID',
             items: orderItems,
-            discount,
+            discount: Money.of(discount, 'USD' as Currency), // TODO: CHECKEAR
             shippingMethodId: checkoutDTO.shippingMethodId,
-            shippingCost: shippingCost,
+            shippingCost: Money.of(shippingCost, 'USD' as Currency), // TODO: CHECKEAR
             shippingAddress: checkoutDTO.shippingAddress,
             billingAddress: checkoutDTO.billingAddress,
             notes: checkoutDTO.notes,

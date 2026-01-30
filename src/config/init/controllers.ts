@@ -8,10 +8,13 @@ import { ProductController } from "../../presentation/product/controller.js";
 import { ShippingController } from "../../presentation/shipping/controller.js";
 import { ShippingMethodController } from "../../presentation/shippingMethod/controller.js";
 import { UserController } from "../../presentation/user/controller.js";
+import { PaymentController } from "../../presentation/payment/controller.js";
+
 
 export function initControllers(usecases: UseCases): Controllers {
 
     return {
+        
         productController: new ProductController(
             usecases.getProductByIdUseCase,
             usecases.getManyProductsUseCase,
@@ -61,7 +64,15 @@ export function initControllers(usecases: UseCases): Controllers {
             usecases.getActiveShippingMethodsUseCase,
             usecases.updateShippingMethodUseCase,
             usecases.deleteShippingMethodUseCase,
-        )
+        ),
+        paymentController: new PaymentController(
+            usecases.createPaymentUseCase,
+            usecases.initiatePaymentUseCase,
+            usecases.getPaymentStatusUseCase,
+            usecases.confirmPaymentUseCase,
+            usecases.refundPaymentUseCase
+        ),
+        
     }
 
 }

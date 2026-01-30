@@ -7,188 +7,195 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-// Enums para los diferentes estados de orden y pago
+// Enums
+enum Role {
+  ADMIN
+  USER
+}
+
 enum OrderStatus {
-    PENDING
-    PAID
-    FAILED
-    CANCELLED
-    PROCESSING
-    SHIPPED
-    DELIVERED
+  PENDING
+  PAID
+  FAILED
+  CANCELLED
+  PROCESSING
+  SHIPPED
+  DELIVERED
 }
 
 enum PaymentStatus {
-    UNPAID
-    PAID
-    REFUNDED
-    EXPIRED
+  PENDING
+  PROCESSING
+  PAID
+  FAILED
+  REFUNDED
+  EXPIRED
 }
 
-enum Role {
-    ADMIN
-    USER
+enum PaymentProvider {
+  MERCADOPAGO
 }
 
-// Modelo Category: Categorías de productos
+enum PaymentMethod {
+  CREDIT_CARD
+  DEBIT_CARD
+}
+
+// Models
 model Category {
-    id       Int       @id @default(autoincrement())
-    name     String    @db.VarChar(100)
-    products Product[] // Relación uno a muchos (una categoría tiene muchos productos)
+  id       Int       @id @default(autoincrement())
+  name     String    @db.VarChar(100)
+  products Product[] // Relación uno a muchos (una categoría tiene muchos productos)
 }
 
-// Modelo Product: Productos disponibles en la tienda
 model Product {
-    id          Int         @id @default(autoincrement())
-    categoryId  Int
-    category    Category    @relation(fields: [categoryId], references: [id])
-    name        String      @db.VarChar(255)
-    description String      @db.Text
-    price       Decimal     @db.Decimal(10, 2)
-    stock       Int         @default(0)
-    imageUrl    String      @db.VarChar(2048)
-    weight      Decimal     @db.Decimal(3, 3)
-    createdAt   DateTime    @default(now())
-    updatedAt   DateTime    @updatedAt
-    cartItems   CartItem[]
-    orderItems  OrderItem[]
+  id          Int         @id @default(autoincrement())
+  categoryId  Int
+  category    Category    @relation(fields: [categoryId], references: [id])
+  name        String      @db.VarChar(255)
+  description String      @db.Text
+  price       Decimal     @db.Decimal(10, 2)
+  stock       Int         @default(0)
+  imageUrl    String      @db.VarChar(2048)
+  weight      Decimal     @db.Decimal(3, 3)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
 }
 
-// Modelo User: Información del usuario
 model User {
-    id        String   @id @default(uuid())
-    name      String   @db.VarChar(30)
-    email     String   @unique @db.VarChar(30)
-    password  String   @db.VarChar(255)
-    role      Role     @default(USER)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    cart      Cart?
-    orders    Order[]
+  id        String   @id @default(uuid())
+  name      String   @db.VarChar(30)
+  email     String   @unique @db.VarChar(30)
+  password  String   @db.VarChar(255)
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  cart      Cart?
+  orders    Order[]
 }
 
-// Modelo Cart: Carrito de compras del usuario
 model Cart {
-    id        String     @id @default(uuid())
-    user      User       @relation(fields: [userId], references: [id])
-    userId    String     @unique // Clave única para relación 1:1
-    items     CartItem[]
-    createdAt DateTime   @default(now())
-    updatedAt DateTime   @updatedAt
+  id        String     @id @default(uuid())
+  user      User       @relation(fields: [userId], references: [id])
+  userId    String     @unique // Clave única para relación 1:1
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }
 
-// Modelo CartItem: Item dentro del carrito de compras
 model CartItem {
-    id        String   @id @default(uuid())
-    cart      Cart     @relation(fields: [cartId], references: [id])
-    cartId    String
-    product   Product  @relation(fields: [productId], references: [id])
-    productId Int
-    quantity  Int      @default(1)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id        String   @id @default(uuid())
+  cart      Cart     @relation(fields: [cartId], references: [id])
+  cartId    String
+  product   Product  @relation(fields: [productId], references: [id])
+  productId Int
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-// Modelo Order: Información de la orden
 model Order {
-    // Identidad
-    id        String   @id @default(uuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id                String   @id @default(uuid())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
-    // Relaciones
-    user   User   @relation(fields: [userId], references: [id])
-    userId String
+  // Relaciones
+  user             User           @relation(fields: [userId], references: [id])
+  userId           String
+  shippingMethod   ShippingMethod @relation(fields: [shippingMethodId], references: [id])
+  shippingMethodId String
+  items            OrderItem[]
+  payment          Payment?       @relation("OrderPayment") // 1:1
+  shipping         Shipping?
 
-    shippingMethod   ShippingMethod @relation(fields: [shippingMethodId], references: [id])
-    shippingMethodId String
+  // Estados
+  status           OrderStatus   @default(PENDING)
+  paymentStatus    PaymentStatus @default(PENDING)
 
-    items    OrderItem[]
-    payments Payment[]
-    shipping Shipping?
+  // Montos
+  totalAmount      Decimal @db.Decimal(10, 2)
+  shippingCost     Decimal @default(0) @db.Decimal(10, 2)
+  discount         Decimal @default(0) @db.Decimal(10, 2)
+  currency         String  @default("USD")
 
-    // Estados
-    status        OrderStatus   @default(PENDING)
-    paymentStatus PaymentStatus @default(UNPAID)
+  // Shipping address
+  shippingName     String
+  shippingStreet   String
+  shippingCity     String
+  shippingState    String
+  shippingPostalCode String
+  shippingCountry  String
+  shippingPhone    String?
 
-    // Montos
-    totalAmount  Decimal @db.Decimal(10, 2)
-    shippingCost Decimal @default(0) @db.Decimal(10, 2)
-    discount     Decimal @default(0) @db.Decimal(10, 2)
-    currency     String  @default("USD")
+  // Billing address
+  billingName      String
+  billingStreet    String
+  billingCity      String
+  billingState     String
+  billingPostalCode String
+  billingCountry   String
 
-    // Shipping address
-    shippingName       String
-    shippingStreet     String
-    shippingCity       String
-    shippingState      String
-    shippingPostalCode String
-    shippingCountry    String
-    shippingPhone      String?
-
-    // Billing address
-    billingName       String
-    billingStreet     String
-    billingCity       String
-    billingState      String
-    billingPostalCode String
-    billingCountry    String
-
-    // Otros
-    notes String? @db.Text
+  // Otros
+  notes            String? @db.Text
 }
 
-// Modelo OrderItem: Productos dentro de una orden
 model OrderItem {
-    id        String  @id @default(uuid())
-    order     Order   @relation(fields: [orderId], references: [id])
-    orderId   String
-    product   Product @relation(fields: [productId], references: [id])
-    productId Int
-    name      String
-    price     Decimal @db.Decimal(10, 2)
-    quantity  Int
-    subtotal  Decimal @db.Decimal(10, 2)
+  id        String  @id @default(uuid())
+  order     Order   @relation(fields: [orderId], references: [id])
+  orderId   String
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+  name      String
+  price     Decimal @db.Decimal(10, 2)
+  quantity  Int
+  subtotal  Decimal @db.Decimal(10, 2)
 }
 
-// Modelo ShippingMethod: Métodos de envío disponibles
 model ShippingMethod {
-    id            String  @id @default(uuid())
-    name          String
-    code          String  @unique
-    price         Decimal @db.Decimal(10, 2)
-    estimatedDays Int
-    isActive      Boolean @default(true)
+  id            String  @id @default(uuid())
+  name          String
+  code          String  @unique
+  price         Decimal @db.Decimal(10, 2)
+  estimatedDays Int
+  isActive      Boolean @default(true)
 
-    orders    Order[]
-    shippings Shipping[]
+  orders    Order[]
+  shippings Shipping[]
 }
 
-// Modelo Shipping: Detalles del envío para una orden
 model Shipping {
-    id               String   @id @default(uuid()) // ID único para el envío
-    orderId          String   @unique // Relación con la orden
-    shippingMethodId String // Relación con el ShippingMethod
-    trackingNumber   String? // Número de seguimiento (opcional)
-    status           String   @default("PENDING") // Estado del envío (PENDIENTE, EN RUTA, etc.)
-    createdAt        DateTime @default(now()) // Fecha de creación del envío
-    updatedAt        DateTime @updatedAt // Fecha de última actualización del envío
+  id               String   @id @default(uuid()) // ID único para el envío
+  orderId          String   @unique // Relación con la orden
+  shippingMethodId String
+  trackingNumber   String?
+  status           String   @default("PENDING")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
-    order          Order          @relation(fields: [orderId], references: [id]) // Relación con la orden
-    shippingMethod ShippingMethod @relation(fields: [shippingMethodId], references: [id]) // Método de envío
+  order            Order          @relation(fields: [orderId], references: [id])
+  shippingMethod   ShippingMethod @relation(fields: [shippingMethodId], references: [id])
 }
 
-// Modelo Payment: Información sobre los pagos realizados
 model Payment {
-    id      String @id @default(uuid())
-    order   Order  @relation(fields: [orderId], references: [id])
-    orderId String
+  id               String       @id @default(uuid())
+  orderId          String       @unique
+  order            Order?       @relation("OrderPayment", fields: [orderId], references: [id])
 
-    provider        String
-    paymentIntentId String
-    method          String
-    last4           String?
-    paidAt          DateTime?
+  status           PaymentStatus @default(PENDING)
+  amount           Decimal      @db.Decimal(10, 2)
+  currency         String       @default("USD")
 
-    createdAt DateTime @default(now())
+  provider         PaymentProvider
+  providerPaymentId String?
+  method           PaymentMethod
+  last4            String
+
+  paidAt           DateTime?
+  failureReason    String?
+  idempotencyKey   String?      @unique
+
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
 }

@@ -1,7 +1,8 @@
 import { ProductEntity } from "../product/entity.js";
+import { Money } from "../shared/value-objects/money.js";
 
 export class CartItemEntity {
-    
+
     constructor(
         public readonly id: string | null,
         public readonly cartId: string,
@@ -10,22 +11,28 @@ export class CartItemEntity {
         public readonly product: ProductEntity,
         public readonly createdAt?: Date,
         public readonly updatedAt?: Date,
-    ) { }
+    ) {}
 
-    public static create(params: {
-        id: string | null;
-        cartId: string;
-        productId: number;
-        quantity: number;
-        product: ProductEntity;
+    static create(props: {
+        cartId: string,
+        productId: number,
+        quantity: number,
+        product: ProductEntity,
+        createdAt?: Date,
+        updatedAt?: Date,
     }): CartItemEntity {
         return new CartItemEntity(
-            params.id ? params.id : null,
-            params.cartId,
-            params.productId,
-            params.quantity,
-            params.product,
+            null,
+            props.cartId,
+            props.productId,
+            props.quantity,
+            props.product,
+            props.createdAt,
+            props.updatedAt,
         );
     }
 
+    public getSubtotal(): Money {
+        return this.product.price.multiply(this.quantity);
+    }
 }
